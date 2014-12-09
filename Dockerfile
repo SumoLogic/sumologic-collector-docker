@@ -15,7 +15,6 @@ RUN apt-get update && \
 EXPOSE 514/udp
 EXPOSE 514
 ADD sumo-sources.json /etc/sumo-sources.json
-ADD sumo.conf /etc/sumo.conf
 ENV SUMO_ACCESS_KEY your-id-here
 ENV SUMO_ACCESS_ID your-key-here
 ENV SUMO_COLLECTOR_NAME collector-container
