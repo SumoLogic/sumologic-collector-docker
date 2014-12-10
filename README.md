@@ -23,11 +23,11 @@ Depending on the source setup, additional commandline parameters will be needed 
 If you are using the ``sumo-sources.json.file.example`` configuration file verbatim, the collector will collect all files in ``/logs`` in the container. If you want to say collect all logs from the hosts ``/var/log``, create the container with a mapped volume:
 
 ```bash
-docker run -i -t -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -v /var/log:/logs [image]
+docker run -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -v /var/log:/logs [image]
 ```
 
 If you are using the Syslog TCP example, you need to map port 514 to a port on the host. The ``-P`` option will automatically map all exposed ports.
 
 ```bash
-docker run -i -t -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -P [image]
+docker run -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -P [image]
 ```
