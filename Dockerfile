@@ -17,6 +17,4 @@ RUN apt-get update && \
 EXPOSE 514/udp
 EXPOSE 514
 
-ADD sumo-sources.json /etc/sumo-sources.json
-
 ENTRYPOINT  ["/opt/SumoCollector/collector", "console", "--", "-t", "-i","$SUMO_ACCESS_ID","-k", "$SUMO_ACCESS_KEY"]
