@@ -15,4 +15,5 @@ RUN apt-get update && \
  apt-get clean && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENTRYPOINT  ["/opt/SumoCollector/collector", "console", "--", "-t", "-i","$SUMO_ACCESS_ID","-k", "$SUMO_ACCESS_KEY"]
+ADD run.sh run.sh 
+ENTRYPOINT ["/bin/bash", "run.sh"]
