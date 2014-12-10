@@ -1,0 +1,23 @@
+{
+  "api.version": "v1",
+  "sources": [
+    { 
+      "sourceType": "Syslog",
+      "name": "syslog-collector-container-tcp",
+      "port": 514,
+      "protocol": "TCP",
+      "encoding": "UTF-8",
+      "forceTimeZone": false,
+      "category": "collector-container"
+    },
+    { 
+      "sourceType": "Syslog",
+      "name": "syslog-collector-container-udp",
+      "port": 514,
+      "protocol": "UDP",
+      "encoding": "UTF-8",
+      "forceTimeZone": false,
+      "category": "collector-container"
+    }
+	]
+}

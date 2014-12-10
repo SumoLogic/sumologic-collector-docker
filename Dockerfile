@@ -15,7 +15,4 @@ RUN apt-get update && \
  apt-get clean && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-EXPOSE 514/udp
-EXPOSE 514
-
 ENTRYPOINT  ["/opt/SumoCollector/collector", "console", "--", "-t", "-i","$SUMO_ACCESS_ID","-k", "$SUMO_ACCESS_KEY"]
