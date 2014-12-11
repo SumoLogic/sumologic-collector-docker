@@ -16,4 +16,4 @@ if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
 	exit 1
 fi
 
-/opt/SumoCollector/collector console -- -t -i $SUMO_ACCESS_ID -k $SUMO_ACCESS_KEY
+/opt/SumoCollector/collector console -- -t -i $SUMO_ACCESS_ID -k $SUMO_ACCESS_KEY -n ${SUMO_COLLECTOR_NAME:=collector_container} -s ${SUMO_SOURCES_JSON:=/etc/sumo_sources.json}
