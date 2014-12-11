@@ -1,11 +1,14 @@
 # Sumo Logic Collector for Docker
 
+Create an access ID and an access key (https://service.sumologic.com/help/Default.htm#Generating_Collector_Installation_API_Keys.htm?Highlight=access%20id) in the Sumo Logic service to use these images. 
+
 ### Syslog Image
 
-A simple "batteries included" syslog image is available and tagged `latest-syslog`. It needs no further configuration. It listens on port 514 TCP and UDP for syslog traffic. To launch it: 
+A simple "batteries included" syslog image is available and tagged `latest-syslog`. It needs no further configuration. It listens on port 514 TCP and UDP for syslog traffic. To run it, simply plug your access ID and an access key into the commandline below:
+
 
 ```bash
-docker run -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -P sumologic/collector:latest-syslog
+docker run -P sumologic/collector:latest-syslog [your Access ID] [your Access-key] 
 ```
 
 ### Base Image
@@ -21,10 +24,10 @@ After configuring a `sumo-sources.json` file, build an image with your configura
 docker build  --tag="yourname/sumocollector" .
 ```
 
-Create an access ID and an access key (https://service.sumologic.com/help/Default.htm#Generating_Collector_Installation_API_Keys.htm?Highlight=access%20id) in the Sumo Logic service and plug them into the below commandline to run the container:
+Plug your access ID and an access key into the commandline below to run the container:
 
 ```bash
-docker run -i -t -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" yourname/sumocollector
+docker run -i -t yourname/sumocollector  [your Access ID] [your Access-key] 
 ```
 
 Depending on the source setup, additional commandline parameters will be needed to create container.
@@ -32,11 +35,5 @@ Depending on the source setup, additional commandline parameters will be needed 
 If you are using the ``sumo-sources.json.file.example`` configuration file verbatim, the collector will collect all files in ``/logs`` in the container. If you want to say collect all logs from the hosts ``/var/log``, create the container with a mapped volume:
 
 ```bash
-docker run -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -v /var/log:/logs yourname/sumocollector
-```
-
-If you are using the Syslog TCP example, you need to map port 514 to a port on the host. The ``-P`` option will automatically map all exposed ports.
-
-```bash
-docker run -e "SUMO_ACCESS_ID=[your ID]" -e "SUMO_ACCESS_KEY=[your-access-key]" -P yourname/sumocollector
+docker run -v /var/log:/logs yourname/sumocollector [your Access ID] [your Access-key] 
 ```
