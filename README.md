@@ -8,7 +8,7 @@ A simple "batteries included" syslog image is available and tagged `latest-syslo
 
 
 ```bash
-docker run -P sumologic/collector:latest-syslog [your Access ID] [your Access-key] 
+docker run docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog sumologic/collector:latest-syslog [your Access ID] [your Access-key] 
 ```
 
 ### Base Image
@@ -21,13 +21,13 @@ Alternatively, create your own `sumo-sources.json` configuration file using the 
 After configuring a `sumo-sources.json` file, build an image with your configuration:
 
 ```bash
-docker build  --tag="yourname/sumocollector" .
+docker build --tag="yourname/sumocollector" .
 ```
 
 Plug your access ID and an access key into the commandline below to run the container:
 
 ```bash
-docker run -i -t yourname/sumocollector  [your Access ID] [your Access-key] 
+docker run yourname/sumocollector [your Access ID] [your Access-key] 
 ```
 
 Depending on the source setup, additional commandline parameters will be needed to create container.
