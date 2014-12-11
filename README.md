@@ -1,6 +1,6 @@
 # Sumo Logic Collector for Docker
 
-This repository offers several variants of Docker images to run the Sumo Logic collector. When images are run, the collector automatically registers with the Sumo Logic service and create sources based on a `sumo-sources.json` file. The collector is configured [ephemeral](https://service.sumologic.com/help/Ephemeral.htm).
+This repository offers several variants of Docker images to run the Sumo Logic Collector. When images are run, the Collector automatically registers with the Sumo Logic service and create sources based on a `sumo-sources.json` file. The Collector is configured [ephemeral](https://service.sumologic.com/help/Ephemeral.htm).
 
 ### Configuration
 
@@ -10,18 +10,18 @@ The following environment variables are supported:
 
 * `SUMO_ACCESS_ID` - Can be used to pass the access ID instead of passing it in as a commandline argument.
 * `SUMO_ACCESS_KEY` - Can be used to pass the access key instead of passing it in as a commandline argument.
-* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the collector. The default is _collector_container_. 
+* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is _collector_container_. 
 * `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`. 
 
 ##### Credentials
 
-All variants require a set of collector credentials. Log into Sumo Logic and create an access ID and an access key to use when running the collector images. See our [online help](https://service.sumologic.com/help/Default.htm#Generating_Collector_Installation_API_Keys.htm) for instructions.
+All variants require a set of Collector credentials. Log into Sumo Logic and create an access ID and an access key to use when running the Collector images. See our [online help](https://service.sumologic.com/help/Default.htm#Generating_Collector_Installation_API_Keys.htm) for instructions.
 
 ### Variants
 
 ##### Syslog Collection
 
-A simple "batteries included" syslog image is available and tagged `latest-syslog`. When run, the collector listens on port 514 TCP and UDP for syslog traffic. Simply plug your access ID and an access key into the commandline below:
+A simple "batteries included" syslog image is available and tagged `latest-syslog`. When run, the Collector listens on port 514 TCP and UDP for syslog traffic. Simply plug your access ID and an access key into the commandline below:
 
 
 ```bash
@@ -30,7 +30,7 @@ docker run docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector"
 
 ##### File Collection
 
-Another "batteries included" image is available and tagged `latest-file`. When run, the collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. Plug your credentials into the commandline below and adjust the 
+Another "batteries included" image is available and tagged `latest-file`. When run, the Collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. Plug your credentials into the commandline below and adjust the 
 volume options as needed: 
 
 ```bash
