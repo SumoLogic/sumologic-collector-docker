@@ -25,7 +25,7 @@ A simple "batteries included" syslog image is available and tagged `latest-syslo
 
 
 ```bash
-docker run docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog [your Access ID] [your Access key] 
+docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog [your Access ID] [your Access key] 
 ```
 
 ##### File Collection
@@ -34,7 +34,7 @@ Another "batteries included" image is available and tagged `latest-file`. When r
 volume options as needed: 
 
 ```bash
-docker run docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [your Access ID] [your Access key] 
+docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [your Access ID] [your Access key] 
 ```
 
 ##### Custom Configuration
