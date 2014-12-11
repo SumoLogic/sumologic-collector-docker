@@ -25,7 +25,7 @@ A simple "batteries included" syslog image is available and tagged `latest-syslo
 
 
 ```bash
-docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog [your Access ID] [your Access key] 
+docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog [Access ID] [Access key] 
 ```
 
 ##### File Collection
@@ -34,7 +34,7 @@ Another "batteries included" image is available and tagged `latest-file`. When r
 volume options as needed: 
 
 ```bash
-docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [your Access ID] [your Access key] 
+docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [Access ID] [Access key] 
 ```
 
 ##### Custom Configuration
@@ -59,7 +59,7 @@ docker build --tag="yourname/sumocollector" .
 To run your image, plug your access ID and an access key into the commandline below to run the container:
 
 ```bash
-docker run -d --name="sumo-logic-collector" yourname/sumocollector [your Access ID] [your Access key] 
+docker run -d --name="sumo-logic-collector" yourname/sumocollector [Access ID] [Access key] 
 ```
 
 Depending on the source setup, additional commandline parameters will be needed to create container.
