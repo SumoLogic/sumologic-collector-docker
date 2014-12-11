@@ -1,6 +1,6 @@
 # Sumo Logic Collector for Docker
 
-Create an access ID and an access key (https://service.sumologic.com/help/Default.htm#Generating_Collector_Installation_API_Keys.htm?Highlight=access%20id) in the Sumo Logic service to use these images. 
+Create an access ID and an access key (https://service.sumologic.com/help/Default.htm#Generating_Collector_Installation_API_Keys.htm) in the Sumo Logic service to use these images. 
 
 ### Syslog Image
 
