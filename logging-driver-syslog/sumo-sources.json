@@ -1,0 +1,14 @@
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "sourceType" : "LocalFile",
+      "name": "logging-driver-syslog",
+      "pathExpression": "/syslog",
+      "multilineProcessingEnabled": false,
+      "automaticDateParsing": true,
+      "forceTimeZone": false,
+      "category": "collector-container"
+    }
+  ]
+}
