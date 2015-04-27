@@ -23,4 +23,4 @@ $ docker run -v /var/log/syslog:/syslog -d \
     sumologic/collector:latest-logging-driver-syslog [Access ID] [Access Key]
 ```
 
-Of course, all containers need to be run with ```--logging-driver=syslog``` for this to work.
+Of course, all containers need to be run with ```--log-driver=syslog``` for this to work.
