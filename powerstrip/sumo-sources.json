@@ -4,7 +4,7 @@
     {
       "sourceType" : "LocalFile",
       "name": "powerstrip-collector-container",
-      "pathExpression": "/container-logfiles/**",
+      "pathExpression": "/var/log/container-logfiles/**",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
