@@ -19,17 +19,19 @@ ADD sumo-sources.json /etc/sumo-sources.json
 
 WORKDIR "/opt/SumoCollector"
 
+RUN ln -s $(grep "wrapper.java.classpath.1" config/wrapper.conf | cut -d"/" -f 2) latest-version
+
 ENTRYPOINT ["jre/bin/java", \
-			"-cp", \
-			"19.119-6/lib/*", \
-            "-server", \
-            "-verbose:gc", \
-            "-Xmx128m", \
-            "-Xms32m", \
-            "-XX:+UseParallelGC", \
-            "-XX:+AggressiveOpts", \
-            "-XX:+UseFastAccessorMethods", \
-			"-XX:+DisableExplicitGC", \
-			"-XX:+HeapDumpOnOutOfMemoryError", \
-			"-Djava.library.path=19.119-6/bin/native/lib", \
-		 	"com.sumologic.scala.collector.Collector"]
+             "-cp", \
+             "latest-version/lib/*", \
+             "-server", \
+             "-verbose:gc", \
+             "-Xmx128m", \
+             "-Xms32m", \
+             "-XX:+UseParallelGC", \
+             "-XX:+AggressiveOpts", \
+             "-XX:+UseFastAccessorMethods", \
+             "-XX:+DisableExplicitGC", \
+             "-XX:+HeapDumpOnOutOfMemoryError", \
+             "-Djava.library.path=latest-version/bin/native/lib", \
+             "com.sumologic.scala.collector.Collector"]
