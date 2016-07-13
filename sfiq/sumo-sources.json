@@ -1,0 +1,32 @@
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "sourceType" : "LocalFile",
+      "name": "localfile",
+      "pathExpression": "/logs/*/*.log",
+      "multilineProcessingEnabled": true,
+      "automaticDateParsing": true,
+      "forceTimeZone": false,
+      "category": "dcos"
+    },
+    {
+      "sourceType": "Syslog",
+      "name": "syslog-tcp",
+      "port": 514,
+      "protocol": "TCP",
+      "encoding": "UTF-8",
+      "forceTimeZone": false,
+      "category": "dcos"
+    },
+    {
+      "sourceType": "Syslog",
+      "name": "syslog-udp",
+      "port": 514,
+      "protocol": "UDP",
+      "encoding": "UTF-8",
+      "forceTimeZone": false,
+      "category": "dcos"
+    }
+  ]
+}

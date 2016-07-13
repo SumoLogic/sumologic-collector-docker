@@ -17,3 +17,21 @@ RUN apt-get update --quiet && \
 
 COPY run.sh run.sh 
 ENTRYPOINT ["/bin/bash", "run.sh"]
+
+# SFIQ customization
+ENV DCOS_ENV ops
+
+# internal deps, we do NOT want cache for them
+# let's bust the cache by referencing an ARG that's supposed to be different for each build
+ARG BUILD_NUMBER
+COPY ./sfiq/requirement_internal.txt sfiq/requirement_internal_${BUILD_NUMBER}.txt
+RUN pip install -r sfiq/requirement_internal_${BUILD_NUMBER}.txt
+
+COPY ./sfiq/get_api_key.py sfiq/
+COPY ./sfiq/sumo-sources.json /etc/
+
+VOLUME /logs
+
+EXPOSE 514/udp
+EXPOSE 514
+
