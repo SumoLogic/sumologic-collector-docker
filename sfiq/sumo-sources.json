@@ -8,7 +8,7 @@
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
-      "category": "dcos"
+      "category": "dcos_default_category"
     },
     {
       "sourceType": "Syslog",
@@ -17,7 +17,7 @@
       "protocol": "TCP",
       "encoding": "UTF-8",
       "forceTimeZone": false,
-      "category": "dcos"
+      "category": "dcos_default_category"
     },
     {
       "sourceType": "Syslog",
@@ -26,7 +26,7 @@
       "protocol": "UDP",
       "encoding": "UTF-8",
       "forceTimeZone": false,
-      "category": "dcos"
+      "category": "dcos_default_category"
     }
   ]
 }

@@ -24,4 +24,5 @@ if [ ! -e $sources_json ]; then
 	exit 1
 fi
 
-/opt/SumoCollector/collector console -- -t -i $access_id -k $access_key -n $collector_name -s $sources_json -u $receiver_url
+sed -i.bk "s,dcos_default_category,$SUMO_CATEGORY," $sources_json
+exec /opt/SumoCollector/collector console -- -t -i $access_id -k $access_key -n $collector_name -s $sources_json -u $receiver_url
