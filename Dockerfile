@@ -21,6 +21,10 @@ ENTRYPOINT ["/bin/bash", "run.sh"]
 # SFIQ customization
 ENV DCOS_ENV ops
 
+RUN apt-get update && \
+    apt-get install -y python curl && \
+    curl -ksL https://bootstrap.pypa.io/get-pip.py | python
+
 # internal deps, we do NOT want cache for them
 # let's bust the cache by referencing an ARG that's supposed to be different for each build
 ARG BUILD_NUMBER
