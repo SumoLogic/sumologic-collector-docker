@@ -19,8 +19,6 @@ COPY run.sh run.sh
 ENTRYPOINT ["/bin/bash", "run.sh"]
 
 # SFIQ customization
-ENV DCOS_ENV ops
-
 RUN apt-get update && \
     apt-get install -y python curl && \
     curl -ksL https://bootstrap.pypa.io/get-pip.py | python
@@ -31,7 +29,7 @@ ARG BUILD_NUMBER
 COPY ./sfiq/requirement_internal.txt sfiq/requirement_internal_${BUILD_NUMBER}.txt
 RUN pip install -r sfiq/requirement_internal_${BUILD_NUMBER}.txt
 
-COPY ./sfiq/get_api_key.py sfiq/
+COPY ./sfiq/get_key.py sfiq/
 COPY ./sfiq/sumo-sources.json /etc/
 
 VOLUME /logs

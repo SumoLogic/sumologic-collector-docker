@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sumo_key=$(python sfiq/get_api_key.py)
+sumo_key=$(python sfiq/get_key.py)
 IFS=':'; sumo_key_arr=($sumo_key); unset IFS;
 
 export SUMO_ACCESS_ID=${sumo_key_arr[0]}
