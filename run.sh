@@ -3,7 +3,7 @@
 access_id=${SUMO_ACCESS_ID:=$1}
 access_key=${SUMO_ACCESS_KEY:=$2}
 receiver_url=${SUMO_RECEIVER_URL:=https://collectors.sumologic.com}
-collector_name=${SUMO_COLLECTOR_NAME:=collector_container}
+collector_name=${SUMO_COLLECTOR_NAME:=`hostname`}
 sources_json=${SUMO_SOURCES_JSON:=/etc/sumo-sources.json}
 
 if [ -z "$access_id" ] || [ -z "$access_key" ]; then
