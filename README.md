@@ -13,6 +13,7 @@ The following environment variables are supported:
 * `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is set dynamically to the value within `/etc/hostname`.
 * `SUMO_COLLECTOR_NAME_PREFIX` - Allows configuring a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the docker hostname
 * `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`.
+* `SUMO_SYNC_SOURCES` - If `true` SUMO_SOURCES_JSON file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. default `false`.
 * `PROXY_HOST` - Sets proxy host when a proxy server is used.
 * `PROXY_PORT` - Sets proxy port when a proxy server is used.
 * `PROXY_USER` - Sets proxy user when a proxy server is used with authentication.
