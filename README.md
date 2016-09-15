@@ -12,6 +12,9 @@ The following environment variables are supported:
 * `SUMO_ACCESS_KEY` - Can be used to pass the access key instead of passing it in as a commandline argument.
 * `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is _collector_container_.
 * `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`.
+* `COLLECTOR_MEM` - Memory in MB assigned to the jvm heap of the collector. The default is `128`.
+* `WRAPPER_DEBUG` - Set the java wrapper to debug mode to troubleshoot startup issues. The default value is `FALSE`.
+* `LOG_TO_STDOUT` - Normalize logging to use stdout so it can the wrapper logs can be watched by doing `docker logs <container_name>`. The default value is `FALSE`.
 
 ##### Credentials
 
