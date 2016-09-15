@@ -18,10 +18,10 @@ The following environment variables are supported:
 * `PROXY_USER` - Sets proxy user when a proxy server is used with authentication.
 * `PROXY_PASSWORD` - Sets proxy password when a proxy server is used with authentication.
 * `PROXY_NTLM_DOMAIN` - Sets proxy NTLM domain when a proxy server is used with NTLM authentication.
-* `CLOBBER` - When true, if there is any existing Collector with the same name, that Collector will be deleted.
-* `DISABLE_SCRIPTS` - If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based Script Sources. When this parameter is passed, this option is removed from the Sumo Logic Web Application, and Script Source cannot be configured.
-* `JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: 64.
-* `JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: 128.
+* `CLOBBER` - When true, if there is any existing Collector with the same name, that Collector will be deleted. default is `false`
+* `DISABLE_SCRIPTS` - If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based Script Sources. When this parameter is passed, this option is removed from the Sumo Logic Web Application, and Script Source cannot be configured. default is `false`
+* `JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
+* `JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
 
 ##### Credentials
 
