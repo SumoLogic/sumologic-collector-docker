@@ -60,4 +60,5 @@ if [ -n "${USER_PROPERTIES}" ]; then
     echo -e ${USER_PROPERTIES} > /opt/SumoCollector/config/user.properties
 fi
 
+# The -t flag will force the collector to run as ephemeral
 /opt/SumoCollector/collector console -- -t
