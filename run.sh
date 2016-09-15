@@ -60,4 +60,4 @@ if [ -n "${USER_PROPERTIES}" ]; then
     echo -e ${USER_PROPERTIES} > /opt/SumoCollector/config/user.properties
 fi
 
-/opt/SumoCollector/collector console
+/opt/SumoCollector/collector console -- -t
