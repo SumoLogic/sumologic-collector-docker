@@ -10,7 +10,8 @@ The following environment variables are supported:
 
 * `SUMO_ACCESS_ID` - Can be used to pass the access ID instead of passing it in as a commandline argument.
 * `SUMO_ACCESS_KEY` - Can be used to pass the access key instead of passing it in as a commandline argument.
-* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is _collector_container_.
+* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is set dynamically to `/etc/hostname`.
+* `SUMO_COLLECTOR_NAME_PREFIX` - Allows configuring a prefix to the collector name.
 * `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`.
 
 ##### Credentials
