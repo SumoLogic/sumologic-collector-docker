@@ -14,15 +14,15 @@ The following environment variables are supported:
 * `SUMO_COLLECTOR_NAME_PREFIX` - Allows configuring a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the docker hostname
 * `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`.
 * `SUMO_SYNC_SOURCES` - If `true` SUMO_SOURCES_JSON file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. default `false`.
-* `PROXY_HOST` - Sets proxy host when a proxy server is used.
-* `PROXY_PORT` - Sets proxy port when a proxy server is used.
-* `PROXY_USER` - Sets proxy user when a proxy server is used with authentication.
-* `PROXY_PASSWORD` - Sets proxy password when a proxy server is used with authentication.
-* `PROXY_NTLM_DOMAIN` - Sets proxy NTLM domain when a proxy server is used with NTLM authentication.
-* `CLOBBER` - When true, if there is any existing Collector with the same name, that Collector will be deleted. default is `false`
-* `DISABLE_SCRIPTS` - If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based Script Sources. When this parameter is passed, this option is removed from the Sumo Logic Web Application, and Script Source cannot be configured. default is `false`
-* `JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
-* `JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
+* `SUMO_PROXY_HOST` - Sets proxy host when a proxy server is used.
+* `SUMO_PROXY_PORT` - Sets proxy port when a proxy server is used.
+* `SUMO_PROXY_USER` - Sets proxy user when a proxy server is used with authentication.
+* `SUMO_PROXY_PASSWORD` - Sets proxy password when a proxy server is used with authentication.
+* `SUMO_PROXY_NTLM_DOMAIN` - Sets proxy NTLM domain when a proxy server is used with NTLM authentication.
+* `SUMO_CLOBBER` - When true, if there is any existing Collector with the same name, that Collector will be deleted. default is `false`
+* `SUMO_DISABLE_SCRIPTS` - If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based Script Sources. When this parameter is passed, this option is removed from the Sumo Logic Web Application, and Script Source cannot be configured. default is `false`
+* `SUMO_JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
+* `SUMO_JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
 
 ##### Credentials
 
