@@ -10,8 +10,19 @@ The following environment variables are supported:
 
 * `SUMO_ACCESS_ID` - Can be used to pass the access ID instead of passing it in as a commandline argument.
 * `SUMO_ACCESS_KEY` - Can be used to pass the access key instead of passing it in as a commandline argument.
-* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is _collector_container_.
+* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is set dynamically to the value within `/etc/hostname`.
+* `SUMO_COLLECTOR_NAME_PREFIX` - Allows configuring a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the docker hostname
 * `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`.
+* `SUMO_SYNC_SOURCES` - If `true` SUMO_SOURCES_JSON file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. default `false`.
+* `SUMO_PROXY_HOST` - Sets proxy host when a proxy server is used.
+* `SUMO_PROXY_PORT` - Sets proxy port when a proxy server is used.
+* `SUMO_PROXY_USER` - Sets proxy user when a proxy server is used with authentication.
+* `SUMO_PROXY_PASSWORD` - Sets proxy password when a proxy server is used with authentication.
+* `SUMO_PROXY_NTLM_DOMAIN` - Sets proxy NTLM domain when a proxy server is used with NTLM authentication.
+* `SUMO_CLOBBER` - When true, if there is any existing Collector with the same name, that Collector will be deleted. default is `false`
+* `SUMO_DISABLE_SCRIPTS` - If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based Script Sources. When this parameter is passed, this option is removed from the Sumo Logic Web Application, and Script Source cannot be configured. default is `false`
+* `SUMO_JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
+* `SUMO_JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
 
 ##### Credentials
 
