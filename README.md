@@ -57,7 +57,7 @@ docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name
 
 ##### Custom Configuration
 
-A base image to build your own image with a custom configuration is tagged `latest`. You need to add  `/etc/sumo-sources.json` to run it.
+A base image to build your own image with a custom configuration is tagged `latest-no-source`. You need to add  `/etc/sumo-sources.json` to run it.
 Examples are available in `example` [in GitHub](https://github.com/SumoLogic/sumologic-collector-docker/tree/master/example), along with some example configuration files. Pick one of the examples and rename to `sumo-sources.json` or create one from scratch. See  our [online help](https://help.sumologic.com/Send_Data/Sources/Use_JSON_to_Configure_Sources) for more details.
 
 After configuring a `sumo-sources.json` file, create a `Dockerfile` similar to the one below:
