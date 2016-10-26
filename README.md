@@ -71,7 +71,7 @@ Examples are available in `example` [in GitHub](https://github.com/SumoLogic/sum
 After configuring a `sumo-sources.json` file, create a `Dockerfile` similar to the one below:
 
 ```
-FROM sumologic/collector:latest
+FROM sumologic/collector:latest-no-source
 MAINTAINER Happy Sumo Customer
 ADD sumo-sources.json /etc/sumo-sources.json
 ```
