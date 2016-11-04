@@ -30,6 +30,14 @@ All variants require a set of Collector credentials. Log into Sumo Logic and cre
 
 ### Variants
 
+##### Docker Collection
+
+Images tagged with `latest` or `latest-docker-sources` are available for Docker collection. When run, the Collector listens on the docker unix socket for container logs, events and stats. Plug your access ID and an access key into the commandline below:
+
+```bash
+docker run -d -v /var/run/docker.sock:/var/run/docker.sock --name="sumo-logic-collector"  sumologic/collector:latest <Access ID> <Access key>
+```
+
 ##### Syslog Collection
 
 A simple "batteries included" syslog image is available and tagged `latest-syslog`. When run, the Collector listens on port 514 TCP and UDP for syslog traffic. Simply plug your access ID and an access key into the commandline below:
@@ -63,7 +71,7 @@ Examples are available in `example` [in GitHub](https://github.com/SumoLogic/sum
 After configuring a `sumo-sources.json` file, create a `Dockerfile` similar to the one below:
 
 ```
-FROM sumologic/collector:latest
+FROM sumologic/collector:latest-no-source
 MAINTAINER Happy Sumo Customer
 ADD sumo-sources.json /etc/sumo-sources.json
 ```
