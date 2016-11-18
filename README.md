@@ -93,7 +93,7 @@ Depending on the source setup, additional commandline parameters will be needed 
 
 ##### Source Templates
 
-This container supports source json configuration templates allowing for string substution using enviroment vaireables. This works by finding all files with a .json.tmpl extentition, looping through all enviroment vairables and replaceing the values. Finally the file is renamed to .json.
+This container supports source json configuration templates allowing for string substitution using environment variables. This works by finding all files with a .json.tmpl extentions, looping through all environment variables and replacing the values. Finally the file is renamed to .json.
 
 For example if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl
 
