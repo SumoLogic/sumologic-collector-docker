@@ -97,6 +97,8 @@ This container supports source json configuration templates allowing for string 
 
 For example if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl
 
+NOTE: You can also create your own docker image with the tmpl files embedded rather then a volume mount.
+
 ```
 docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /path/to/sources:/sumo  -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/sumo/sources.json -e ENVIRONMENT=prod sumologic/collector:latest-file [Access ID] [Access key]
 ```
