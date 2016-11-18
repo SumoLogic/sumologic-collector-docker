@@ -13,6 +13,44 @@ if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
 	exit 1
 fi
 
+# Support using env as replacement within sources.
+# Gather all template files
+declare -a TEMPLATE_FILES
+if [ -r "${SUMO_SOURCES_JSON}.tmpl" ]; then
+    TEMPLATE_FILES+=("${SUMO_SOURCES_JSON}.tmpl")
+fi
+if [ -r "${SUMO_SYNC_SOURCES}.tmpl" ]; then
+    TEMPLATE_FILES+=("${SUMO_SYNC_SOURCES}.tmpl")
+fi
+if [ -d "${SUMO_SYNC_SOURCES}" ]; then
+    for f in $(find ${SUMO_SYNC_SOURCES} -name '*.tmpl'); do TEMPLATE_FILES+=(${f}); done
+fi
+
+function unregex {
+   sed -e 's/[]\/()$*.^|[]/\\&/g' <<< "$1"
+}
+
+function repl_env {
+    name=$(unregex "${1}")
+    value=$(unregex "${2}")
+    sed -e "s/\${${name}}/${value}/" <<< "${3}"
+}
+
+for from in "${TEMPLATE_FILES[@]}"
+do
+    # Replace all env variables and remove .tmpl extension
+    content=`cat ${from}`
+    to=${from%.*}
+
+    while IFS='=' read -r name value ; do
+        content=$(repl_env "${name}" "${value}" "${content}")
+    done < <(env)
+
+    echo "Replacing environment variables from ${from} into ${to}"
+    echo "${content}" > ${to}
+done
+
+
 if [ ! -e "${SUMO_SOURCES_JSON}" ]; then
 	echo "FATAL: Unable to find $SUMO_SOURCES_JSON - please make sure you include it in your image!"
 	exit 1
@@ -59,6 +97,7 @@ done
 if [ -n "${USER_PROPERTIES}" ]; then
     echo -e ${USER_PROPERTIES} > /opt/SumoCollector/config/user.properties
 fi
+
 
 # The -t flag will force the collector to run as ephemeral
 /opt/SumoCollector/collector console -- -t

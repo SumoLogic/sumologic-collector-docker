@@ -89,3 +89,45 @@ docker run -d --name="sumo-logic-collector" yourname/sumocollector [Access ID] [
 ```
 
 Depending on the source setup, additional commandline parameters will be needed to create container.
+
+
+##### Source Templates
+
+This container supports source json configuration templates allowing for string substution using enviroment vaireables. This works by finding all files with a .json.tmpl extentition, looping through all enviroment vairables and replaceing the values. Finally the file is renamed to .json.
+
+For example if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl
+
+```
+docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /path/to/sources:/sumo  -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/sumo/sources.json -e ENVIRONMENT=prod sumologic/collector:latest-file [Access ID] [Access key]
+```
+
+File /path/to/sources/sources.json.tmpl
+
+```
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "sourceType" : "LocalFile",
+      "name": "localfile-collector-container",
+      "pathExpression": "/var/lib/docker/containers/**/*.log",
+      "category": "${ENVIRONMENT}/containers"
+    }
+  ]
+}
+```
+
+The resulting output of /sumo/sources.json will be
+```
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "sourceType" : "LocalFile",
+      "name": "localfile-collector-container",
+      "pathExpression": "/var/lib/docker/containers/**/*.log",
+      "category": "prod/containers"
+    }
+  ]
+}
+```
