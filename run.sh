@@ -19,10 +19,7 @@ declare -a TEMPLATE_FILES
 if [ -r "${SUMO_SOURCES_JSON}.tmpl" ]; then
     TEMPLATE_FILES+=("${SUMO_SOURCES_JSON}.tmpl")
 fi
-if [ -r "${SUMO_SYNC_SOURCES}.tmpl" ]; then
-    TEMPLATE_FILES+=("${SUMO_SYNC_SOURCES}.tmpl")
-fi
-if [ -d "${SUMO_SYNC_SOURCES}" ]; then
+if [ -d "${SUMO_SOURCES_JSON}" ]; then
     for f in $(find ${SUMO_SYNC_SOURCES} -name '*.tmpl'); do TEMPLATE_FILES+=(${f}); done
 fi
 
