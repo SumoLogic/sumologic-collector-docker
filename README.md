@@ -56,7 +56,7 @@ volume options as needed:
 docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [Access ID] [Access key]
 ```
 
-Using the `/etc/sumo-containers.json` soure file you can collect logs from all containers.
+Using the `/etc/sumo-containers.json` source file you can collect logs from all containers.
 
 ```bash
 docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/etc/sumo-containers.json sumologic/collector:latest-file [Access ID] [Access key]
