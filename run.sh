@@ -43,8 +43,13 @@ do
         content=$(repl_env "${name}" "${value}" "${content}")
     done < <(env)
 
-    echo "Replacing environment variables from ${from} into ${to}"
     echo "${content}" > ${to}
+    if [ $? -ne 0 ]; then
+        echo "FATAL: unable to write to ${to}"
+        exit 1
+    else
+        echo "INFO: Replacing environment variables from ${from} into ${to}"
+    fi
 done
 
 
