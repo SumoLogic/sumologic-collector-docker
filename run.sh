@@ -20,36 +20,29 @@ if [ -r "${SUMO_SOURCES_JSON}.tmpl" ]; then
     TEMPLATE_FILES+=("${SUMO_SOURCES_JSON}.tmpl")
 fi
 if [ -d "${SUMO_SOURCES_JSON}" ]; then
-    for f in $(find ${SUMO_SYNC_SOURCES} -name '*.tmpl'); do TEMPLATE_FILES+=(${f}); done
+    for f in $(find ${SUMO_SOURCES_JSON} -name '*.tmpl'); do TEMPLATE_FILES+=(${f}); done
 fi
 
-function unregex {
-   sed -e 's/[]\/()$*.^|[]/\\&/g' <<< "$1"
-}
-
-function repl_env {
-    name=$(unregex "${1}")
-    value=$(unregex "${2}")
-    sed -e "s/\${${name}}/${value}/" <<< "${3}"
-}
 
 for from in "${TEMPLATE_FILES[@]}"
 do
     # Replace all env variables and remove .tmpl extension
-    content=`cat ${from}`
     to=${from%.*}
-
-    while IFS='=' read -r name value ; do
-        content=$(repl_env "${name}" "${value}" "${content}")
-    done < <(env)
-
-    echo "${content}" > ${to}
+    echo > ${to}
     if [ $? -ne 0 ]; then
         echo "FATAL: unable to write to ${to}"
         exit 1
-    else
-        echo "INFO: Replacing environment variables from ${from} into ${to}"
     fi
+
+    OLD_IFS=$IFS
+    IFS=$'\n'
+    while read line; do
+      echo $(eval echo "\"${line//\"/\\\"}\"") >> ${to}
+    done <${from}
+    IFS=${OLD_IFS}
+
+    echo "INFO: Replacing environment variables from ${from} into ${to}"
+
 done
 
 
