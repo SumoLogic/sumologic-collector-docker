@@ -56,7 +56,7 @@ volume options as needed:
 docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [Access ID] [Access key]
 ```
 
-Using the `/etc/sumo-containers.json` soure file you can collect logs from all containers.
+Using the `/etc/sumo-containers.json` source file you can collect logs from all containers.
 
 ```bash
 docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/etc/sumo-containers.json sumologic/collector:latest-file [Access ID] [Access key]
@@ -89,3 +89,47 @@ docker run -d --name="sumo-logic-collector" yourname/sumocollector [Access ID] [
 ```
 
 Depending on the source setup, additional commandline parameters will be needed to create container.
+
+
+##### Source Templates
+
+This container supports source json configuration templates allowing for string substitution using environment variables. This works by finding all files with a .json.tmpl extentions, looping through all environment variables and replacing the values. Finally the file is renamed to .json.
+
+For example if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl
+
+NOTE: You can also create your own docker image with the tmpl files embedded rather then a volume mount.
+
+```
+docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /path/to/sources:/sumo  -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/sumo/sources.json -e ENVIRONMENT=prod sumologic/collector:latest-file [Access ID] [Access key]
+```
+
+File /path/to/sources/sources.json.tmpl
+
+```
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "sourceType" : "LocalFile",
+      "name": "localfile-collector-container",
+      "pathExpression": "/var/lib/docker/containers/**/*.log",
+      "category": "${ENVIRONMENT}/containers"
+    }
+  ]
+}
+```
+
+The resulting output of /sumo/sources.json will be
+```
+{
+  "api.version": "v1",
+  "sources": [
+    {
+      "sourceType" : "LocalFile",
+      "name": "localfile-collector-container",
+      "pathExpression": "/var/lib/docker/containers/**/*.log",
+      "category": "prod/containers"
+    }
+  ]
+}
+```
