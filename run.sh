@@ -13,39 +13,6 @@ if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
 	exit 1
 fi
 
-# Support using env as replacement within sources.
-# Gather all template files
-declare -a TEMPLATE_FILES
-if [ -r "${SUMO_SOURCES_JSON}.tmpl" ]; then
-    TEMPLATE_FILES+=("${SUMO_SOURCES_JSON}.tmpl")
-fi
-if [ -d "${SUMO_SOURCES_JSON}" ]; then
-    for f in $(find ${SUMO_SOURCES_JSON} -name '*.tmpl'); do TEMPLATE_FILES+=(${f}); done
-fi
-
-
-for from in "${TEMPLATE_FILES[@]}"
-do
-    # Replace all env variables and remove .tmpl extension
-    to=${from%.*}
-    echo > ${to}
-    if [ $? -ne 0 ]; then
-        echo "FATAL: unable to write to ${to}"
-        exit 1
-    fi
-
-    OLD_IFS=$IFS
-    IFS=$'\n'
-    while read line; do
-      echo $(eval echo "\"${line//\"/\\\"}\"") >> ${to}
-    done <${from}
-    IFS=${OLD_IFS}
-
-    echo "INFO: Replacing environment variables from ${from} into ${to}"
-
-done
-
-
 if [ ! -e "${SUMO_SOURCES_JSON}" ]; then
 	echo "FATAL: Unable to find $SUMO_SOURCES_JSON - please make sure you include it in your image!"
 	exit 1
@@ -92,7 +59,6 @@ done
 if [ -n "${USER_PROPERTIES}" ]; then
     echo -e ${USER_PROPERTIES} > /opt/SumoCollector/config/user.properties
 fi
-
 
 # The -t flag will force the collector to run as ephemeral
 /opt/SumoCollector/collector console -- -t
