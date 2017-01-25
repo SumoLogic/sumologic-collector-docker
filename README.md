@@ -24,6 +24,14 @@ The following environment variables are supported:
 * `SUMO_JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
 * `SUMO_JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
 
+##### Advanced Use
+Additionally, the following environment variable is supported:
+* `SUMO_GENERATE_USER_PROPERTIES` - When `false`, skip generating `user.properties`. This allows the collector to be run with a user-supplied `user.properties` file instead of the `run.sh` script generating it using the above environment variables on container startup. default is `true`. The example below shows how to use a Docker volume mount to accomplish this:
+
+```bash
+docker run <other options> -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties collector:$tag
+```
+
 ##### Credentials
 
 All variants require a set of Collector credentials. Log into Sumo Logic and create an access ID and an access key to use when running the Collector images. See our [online help](https://help.sumologic.com/Manage/Security/Access_Keys/Create_Access_Keys) for instructions.
