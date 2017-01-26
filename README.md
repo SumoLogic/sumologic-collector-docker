@@ -4,9 +4,13 @@ This repository offers several variants of Docker images to run the Sumo Logic C
 
 ### Configuration
 
-##### Environment variables
+Log into Sumo Logic to create an Access ID and an Access Key to register the Sumo Logic Collector. See the [online help](https://help.sumologic.com/Manage/Security/Access_Keys/Create_Access_Keys) for instructions.
 
-The following environment variables are supported:
+The Sumo Logic Collector can be configured either with environment variables, or a volume mounted `user.properties` file.
+
+#### Approach 1: Environment variables
+
+The following environment variables are supported. These can be passed to the `docker run` command with the `-e` flag.
 
 * `SUMO_ACCESS_ID` - Can be used to pass the access ID instead of passing it in as a commandline argument.
 * `SUMO_ACCESS_KEY` - Can be used to pass the access key instead of passing it in as a commandline argument.
@@ -24,21 +28,20 @@ The following environment variables are supported:
 * `SUMO_JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
 * `SUMO_JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
 
-##### Advanced Use
-Additionally, the following environment variable is supported:
-* `SUMO_GENERATE_USER_PROPERTIES` - When `false`, skip generating `user.properties`. This allows the collector to be run with a user-supplied `user.properties` file instead of the `run.sh` script generating it using the above environment variables on container startup. default is `true`. The example below shows how to use a Docker volume mount to accomplish this:
+#### Approach 2: User.properties File
+Alternatively, you can provide a `user.properties` file via a Docker volume mount.  See the [online help](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) for a list of possible parameters.
+
+To use a custom `user.properties` file, you must pass the environment variable `SUMO_GENERATE_USER_PROPERTIES=false`, as well as provide the Docker volume mount to replace the file located at `/opt/SumoCollector/config/user.properties`.
+
+Example:
 
 ```bash
 docker run <other options> -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties collector:$tag
 ```
 
-##### Credentials
-
-All variants require a set of Collector credentials. Log into Sumo Logic and create an access ID and an access key to use when running the Collector images. See our [online help](https://help.sumologic.com/Manage/Security/Access_Keys/Create_Access_Keys) for instructions.
-
 ### Variants
 
-##### Docker Collection
+#### Docker Collection
 
 Images tagged with `latest` or `latest-docker-sources` are available for Docker collection. When run, the Collector listens on the docker unix socket for container logs, events and stats. Plug your access ID and an access key into the commandline below:
 
@@ -46,7 +49,7 @@ Images tagged with `latest` or `latest-docker-sources` are available for Docker 
 docker run -d -v /var/run/docker.sock:/var/run/docker.sock --name="sumo-logic-collector"  sumologic/collector:latest <Access ID> <Access key>
 ```
 
-##### Syslog Collection
+#### Syslog Collection
 
 A simple "batteries included" syslog image is available and tagged `latest-syslog`. When run, the Collector listens on port 514 TCP and UDP for syslog traffic. Simply plug your access ID and an access key into the commandline below:
 
@@ -55,7 +58,7 @@ A simple "batteries included" syslog image is available and tagged `latest-syslo
 docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog [Access ID] [Access key]
 ```
 
-##### File Collection
+#### File Collection
 
 Another "batteries included" image is available and tagged `latest-file`. When run, the Collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. Plug your credentials into the commandline below and adjust the
 volume options as needed:
@@ -71,7 +74,7 @@ docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name
 ```
 
 
-##### Custom Configuration
+#### Custom Configuration
 
 A base image to build your own image with a custom configuration is tagged `latest-no-source`. You need to add  `/etc/sumo-sources.json` to run it.
 Examples are available in `example` [in GitHub](https://github.com/SumoLogic/sumologic-collector-docker/tree/master/example), along with some example configuration files. Pick one of the examples and rename to `sumo-sources.json` or create one from scratch. See  our [online help](https://help.sumologic.com/Send_Data/Sources/Use_JSON_to_Configure_Sources) for more details.
@@ -99,7 +102,7 @@ docker run -d --name="sumo-logic-collector" yourname/sumocollector [Access ID] [
 Depending on the source setup, additional commandline parameters will be needed to create container.
 
 
-##### Source Templates
+#### Source Templates
 
 This container supports source json configuration templates allowing for string substitution using environment variables. This works by finding all files with a .json.tmpl extentions, looping through all environment variables and replacing the values. Finally the file is renamed to .json.
 
