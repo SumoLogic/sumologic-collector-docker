@@ -1,0 +1,12 @@
+{
+  "api.version": "v1",
+  "sources": [
+        {
+            "sourceType": "Graphite",
+            "name": "collectd",
+            "protocol": "UDP",
+            "port": 2003
+        }
+   ]
+}
+
