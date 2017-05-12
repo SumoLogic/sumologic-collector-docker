@@ -31,7 +31,7 @@ The following environment variables are supported. These can be passed to the `d
 #### Approach 2: User.properties File
 Alternatively, you can provide a `user.properties` file via a Docker volume mount.  See the [online help](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) for a list of possible parameters.
 
-To use a custom `user.properties` file, you must pass the environment variable `SUMO_GENERATE_USER_PROPERTIES=false`, as well as provide the Docker volume mount to replace the file located at `/opt/SumoCollector/config/user.properties`.
+To use a custom `user.properties` file, you must pass the environment variable `SUMO_GENERATE_USER_PROPERTIES=false`, as well as providing the Docker volume mount to replace the file located at `/opt/SumoCollector/config/user.properties`.
 
 Example:
 
@@ -60,8 +60,7 @@ docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/
 
 #### File Collection
 
-Another "batteries included" image is available and tagged `latest-file`. When run, the Collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. Plug your credentials into the commandline below and adjust the
-volume options as needed:
+Another "batteries included" image is available and tagged `latest-file`. When run, the Collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. Plug your credentials into the commandline below and adjust the volume options as needed:
 
 ```bash
 docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [Access ID] [Access key]
@@ -106,9 +105,9 @@ Depending on the source setup, additional commandline parameters will be needed 
 
 This container supports source json configuration templates allowing for string substitution using environment variables. This works by finding all files with a .json.tmpl extentions, looping through all environment variables and replacing the values. Finally the file is renamed to .json.
 
-For example if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl
+NOTE: You can also create your own docker image with the tmpl files embedded rather than a volume mount.
 
-NOTE: You can also create your own docker image with the tmpl files embedded rather then a volume mount.
+For example, if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl:
 
 ```
 docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /path/to/sources:/sumo  -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/sumo/sources.json -e ENVIRONMENT=prod sumologic/collector:latest-file [Access ID] [Access key]
