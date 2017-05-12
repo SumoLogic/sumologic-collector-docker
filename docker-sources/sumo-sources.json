@@ -3,7 +3,7 @@
   "sources": [
         {
             "name": "Docker-logs",
-            "category": "docker",
+            "category": "docker-logs",
             "allContainers": true,
             "collectEvents": true,
             "uri": "unix:///var/run/docker.sock",
@@ -13,7 +13,7 @@
         },
         {
             "name": "Docker-stats",
-            "category": "docker",
+            "category": "docker-stats",
             "automaticDateParsing": true,
             "forceTimeZone": false,
             "cutoffTimestamp": 0,
