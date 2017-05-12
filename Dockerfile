@@ -17,3 +17,4 @@ RUN apt-get update --quiet && \
 
 COPY run.sh run.sh 
 ENTRYPOINT ["/bin/bash", "run.sh"]
+EXPOSE 514 514/udp
