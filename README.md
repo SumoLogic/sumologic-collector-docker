@@ -4,7 +4,7 @@ This repository offers several variants of Docker images to run the Sumo Logic C
 
 ### Configuration
 
-Log into Sumo Logic to create an Access ID and an Access Key to register the Sumo Logic Collector. See the [online help](https://help.sumologic.com/Manage/Security/Access_Keys/Create_Access_Keys) for instructions.
+Log into Sumo Logic to create an Access ID and an Access Key to register the Sumo Logic Collector. See the [online help](https://help.sumologic.com/Manage/Security/Access-Keys) for instructions.
 
 The Sumo Logic Collector can be configured either with environment variables, or a volume mounted `user.properties` file.
 
