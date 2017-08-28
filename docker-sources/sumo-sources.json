@@ -22,7 +22,8 @@
             "allContainers": true,
             "multilineProcessingEnabled": false,
             "certPath": "",
-            "sourceType": "DockerStats"
+            "sourceType": "DockerStats",
+            "pollInterval": 60000
         }
    ]
 }
