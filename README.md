@@ -41,7 +41,7 @@ When run, the collector listens on the Docker Unix socket for container logs, ev
 
 Sumo’s Docker Logs source and Docker Stats source use the Docker Engine API to gather the following data from Docker:
 
-* Docker container logs. Sumo’s Docker Logs source collects container logs. For information about the API Sumo uses to collect logs, see [Get Container Logs](https://docs.docker.com/engine/api/v1.29/#operation/ContainerLogshttps://docs.docker.com/engine/api/v1.29/#operation/ContainerLogs) in Docker API documentation. 
+* Docker container logs. Sumo’s Docker Logs source collects container logs. For information about the API Sumo uses to collect logs, see [Get Container Logs](https://docs.docker.com/engine/api/v1.29/#operation/ContainerLogs) in Docker API documentation. 
 
 * Docker events. Sumo’s Dockers log source collect Docker events. For information about Docker events, see [Monitor Events](https://docs.docker.com/engine/api/v1.29/#operation/SystemEvents) in Docker API documentation.
 
