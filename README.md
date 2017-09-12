@@ -1,3 +1,24 @@
+- [Sumo Logic Collector for Docker](#sumo-logic-collector-for-docker)
+- [Use the Docker collection image](#use-the-docker-collection-image)
+  * [Prerequisites and limitations](#prerequisites-and-limitations)
+  * [Step 1 Create Sumo Access ID and Key](#step-1-create-sumo-access-id-and-key)
+  * [Step 2 Tailor source configuration](#step-2-tailor-source-configuration)
+    + [More about defining container filters](#more-about-defining-container-filters)
+  * [Step 3 Run the image](#step-3-run-the-image)
+    + [Collector environment variables](#collector-environment-variables)
+    + [Configure collector in user.properties file](#configure-collector-in-userproperties-file)
+    + [To monitor more than 40 containers](#to-monitor-more-than-40-containers)
+  * [Step 4 Install Sumo app for Docker](#step-4-install-sumo-app-for-docker)
+  * [Step 5 Run searches and use dashboards](#step-5-run-searches-and-use-dashboards)
+    + [Sample Docker messages](#sample-docker-messages)
+    + [Sample query for containers created or started](#sample-query-for-containers-created-or-started)
+- [Use the Syslog collection image](#use-the-syslog-collection-image)
+- [Use the file collection image](#use-the-file-collection-image)
+- [Create a custom Docker image](#create-a-custom-docker-image)
+  * [Using source templates](#using-source-templates)
+
+
+
 # Sumo Logic Collector for Docker
 
 This repository offers several variants of Docker images to run the Sumo Logic collector. The batteries-included images contains one or more pre-configured sources. In Sumo, collectors use sources to collect data. The following images are available:
@@ -29,8 +50,7 @@ Sumo’s Docker Logs source and Docker Stats source use the Docker Engine API to
 ## Prerequisites and limitations
 The containers you’re going to monitor must use either the `json-file` or the `journald driver`. For more information, see [Configure Logging Drivers](https://docs.docker.com/engine/admin/logging/overview/) in Docker help.
 
-By default, you can monitor up to 40 Docker containers on a Docker host. If you want to monitor more than 40 containers on a given host you can configure a larger number in `collector.properties'.  We don’t support monitoring more than 100 containers on a Docker host.
- 
+By default, you can monitor up to 40 Docker containers on a Docker host. If you want to monitor more than 40 containers on a given host, see [To monitor more than 40 containers](#to-monitor-more-than-40-containers).
 
 ## Step 1 Create Sumo Access ID and Key
 
@@ -60,7 +80,7 @@ For example:
 
 For general information about configuring Docker sources, see [Docker log source](https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources/JSON-Parameters-for-Installed-Sources#Docker_Log_Source) and [Docker stats source](https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources/JSON-Parameters-for-Installed-Sources#Docker_Stats_Source) in Sumo help.
 
-When you run the image, specify the location of your `sumo-sources.json` file using the `SUMO_SOURCES_JSON` environment variable. For information about using environment variables, see the "Step 3: Run the image" section below. 
+When you run the image, specify the location of your `sumo-sources.json` file using the `SUMO_SOURCES_JSON` environment variable. For information about using environment variables, see the [Collector environment variables](#collector-environment-variables) below. 
 
 ### More about defining container filters 
 
@@ -94,7 +114,7 @@ To run the Docker Collection image, run the following command, supplying your ac
 The collector can be configured either with environment variables, or a volume-mounted `user.properties` file, as described in the sections below.
 
 ### Collector environment variables
-The following environment variables are supported. You can pass environment variables to the docker run command with the `-e` flag.
+The following environment variables are supported. You can pass environment variables to the `docker run` command with the `-e` flag.
 
 
 |Environment Variable      |Description    |
@@ -127,20 +147,29 @@ For example:
 ```
 docker run other options -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties sumologic/collector:$tag
 ```
-### To monitor more than 40 containers.
+### To monitor more than 40 containers
 
 By default, you can collect from up to 40 containers. To increase the limit:
 
-1. Open a bash shell with the running collector container
+1. Open a bash shell with the running collector container with either:
 
-`docker exec -ti <container_id or name> /bin/bash`
+`docker exec -ti container_id /bin/bash`  
 
-2. Edit the file located at `/opt/SumoCollector/config/collector.properties`, to add or update the `docker.maxPerContainerConnections` property. The maximum supported value is 100. 
+or 
 
-3. Exit the shell
+`docker exec -ti container_name /bin/bash`
 
-4. Restart the container
-`docker restart container_id or name`5
+2. Edit the file located at `/opt/SumoCollector/config/collector.properties`, to add the `docker.maxPerContainerConnections` property. The maximum supported value is 100. 
+
+3. Exit the shell.
+
+4. Restart the container with either:
+
+`docker restart container_id`
+
+or 
+
+`docker restart container_name`
 
 
 ## Step 4 Install Sumo app for Docker
