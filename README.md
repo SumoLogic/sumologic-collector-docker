@@ -1,116 +1,245 @@
 # Sumo Logic Collector for Docker
 
-This repository offers several variants of Docker images to run the Sumo Logic Collector. When images are run, the Collector automatically registers with the Sumo Logic service and create sources based on a `sumo-sources.json` file. The Collector is configured [ephemeral](https://help.sumologic.com/Send_Data/Installed_Collectors/sumo.conf).
+This repository offers several variants of Docker images to run the Sumo Logic collector. The batteries-included images contains one or more pre-configured sources. In Sumo, collectors use sources to collect data. The following images are available:
 
-### Configuration
+* Docker Collection—This batteries-included image runs the collector with Sumo’s Docker Logs source and Docker Stats source. This allows you to collect container logs, events, and stats, and to use the [Sumo web app for Docker](https://help.sumologic.com/Send-Data/Data-Types/Docker/Docker-App-Dashboards). For instructions on using this image, see [Use the Docker Collection Image](#use-the-docker-collection-image).
 
-Log into Sumo Logic to create an Access ID and an Access Key to register the Sumo Logic Collector. See the [online help](https://help.sumologic.com/Manage/Security/Access-Keys) for instructions.
+* Syslog Collection—This batteries-included image runs the collector with Sumo’s Syslog source. The collector will listen on port 514 TCP and UDP for Syslog traffic. For more information, see [Use the Syslog Collection Image](#use-the-syslog-collection-image).
 
-The Sumo Logic Collector can be configured either with environment variables, or a volume mounted `user.properties` file.
+* File Collection—This batteries-included image runs the collector with Sumo’s local file source. This allows you to collect all files from `/tmp/clogs/` from a Docker volume on the host. For more information, see [Use the File Collection Image](#use-the-file-collection-image).
 
-#### Approach 1: Environment variables
+* Custom Configuration—This is a base image you can use to build your own custom-configured collector image. For more information, see [Create a Custom Docker Image](#create-a-custom-docker-image).
 
-The following environment variables are supported. These can be passed to the `docker run` command with the `-e` flag.
+When you run a collector image, the collector automatically registers with the Sumo service and creates sources based on a `sumo-sources.json` file. In each of the batteries-included images, the collector is configured to be ephemeral: it will be deleted automatically after being offline for 12 hours. For information about ephemeral collectors, see [Set a Collector as Ephemeral](https://help.sumologic.com/Send-Data/Installed-Collectors/05Reference-Information-for-Collector-Installation/11Set-a-Collector-as-Ephemeral), in Sumo help.
 
-* `SUMO_ACCESS_ID` - Can be used to pass the access ID instead of passing it in as a commandline argument.
-* `SUMO_ACCESS_KEY` - Can be used to pass the access key instead of passing it in as a commandline argument.
-* `SUMO_COLLECTOR_NAME` - Allows configuring the name of the Collector. The default is set dynamically to the value within `/etc/hostname`.
-* `SUMO_COLLECTOR_NAME_PREFIX` - Allows configuring a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the docker hostname
-* `SUMO_SOURCES_JSON` - Allows specifying the path of the `sumo-sources.json` file. The default is `/etc/sumo-sources.json`.
-* `SUMO_SYNC_SOURCES` - If `true` SUMO_SOURCES_JSON file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. default `false`.
-* `SUMO_PROXY_HOST` - Sets proxy host when a proxy server is used.
-* `SUMO_PROXY_PORT` - Sets proxy port when a proxy server is used.
-* `SUMO_PROXY_USER` - Sets proxy user when a proxy server is used with authentication.
-* `SUMO_PROXY_PASSWORD` - Sets proxy password when a proxy server is used with authentication.
-* `SUMO_PROXY_NTLM_DOMAIN` - Sets proxy NTLM domain when a proxy server is used with NTLM authentication.
-* `SUMO_CLOBBER` - When true, if there is any existing Collector with the same name, that Collector will be deleted. default is `false`
-* `SUMO_DISABLE_SCRIPTS` - If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based Script Sources. When this parameter is passed, this option is removed from the Sumo Logic Web Application, and Script Source cannot be configured. default is `false`
-* `SUMO_JAVA_MEMORY_INIT` - Sets the initial java heap size (in MB). Default: `64`.
-* `SUMO_JAVA_MEMORY_MAX` - Sets the maximum java heap size (in MB). Default: `128`.
+# Use the Docker collection image 
 
-#### Approach 2: User.properties File
-Alternatively, you can provide a `user.properties` file via a Docker volume mount.  See the [online help](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) for a list of possible parameters.
+The batteries-included image tagged `latest` runs the collector with Sumo’s Docker Logs source and Docker Stats source. 
 
-To use a custom `user.properties` file, you must pass the environment variable `SUMO_GENERATE_USER_PROPERTIES=false`, as well as providing the Docker volume mount to replace the file located at `/opt/SumoCollector/config/user.properties`.
+When run, the collector listens on the Docker Unix socket for container logs, events and stats. 
 
-Example:
+Sumo’s Docker Logs source and Docker Stats source use the Docker Engine API to gather the following data from Docker:
 
-```bash
-docker run <other options> -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties collector:$tag
+* Docker container logs. Sumo’s Docker Logs source collects container logs. For information about the API Sumo uses to collect logs, see [Get Container Logs](https://docs.docker.com/engine/api/v1.29/#operation/ContainerLogshttps://docs.docker.com/engine/api/v1.29/#operation/ContainerLogs) in Docker API documentation. 
+
+* Docker events. Sumo’s Dockers log source collect Docker events. For information about Docker events, see [Monitor Events](https://docs.docker.com/engine/api/v1.29/#operation/SystemEvents) in Docker API documentation.
+
+* Docker container stats. Sumo’s Docker stats source collects stats. For information about Docker stats, see [Get Container Stats Based on Resource Usage](https://docs.docker.com/engine/api/v1.29/#operation/ContainerExporthttps://docs.docker.com/engine/api/v1.29/#operation/ContainerExport) in Docker API documentation.
+
+## Prerequisites and limitations
+The containers you’re going to monitor must use either the `json-file` or the `journald driver`. For more information, see [Configure Logging Drivers](https://docs.docker.com/engine/admin/logging/overview/) in Docker help.
+
+By default, you can monitor up to 40 Docker containers on a Docker host. If you want to monitor more than 40 containers on a given host you can configure a larger number in `collector.properties'.  We don’t support monitoring more than 100 containers on a Docker host.
+ 
+
+## Step 1 Create Sumo Access ID and Key
+
+If you don’t already have a Sumo account, you can create one by clicking **Free Trial** on https://www.sumologic.com/.
+
+Log into Sumo to create an access ID and an access key to register the Sumo collector. For instructions, see [Access Keys](https://help.sumologic.com/Manage/Security/Access-Keys) in Sumo help. Make a note of the access ID and access key. You supply these credentials when you start the Sumo collector.
+
+## Step 2 Tailor source configuration 
+
+There are two Sumo sources included in the image: Docker logs and Docker stats. The JSON file defines the sources is at https://github.com/SumoLogic/sumologic-collector-docker/blob/master/docker-sources/sumo-sources.json.  
+
+The Docker logs source in the image collects container logs from all containers on a Docker host, and events. Processing of multiline log messages is not enabled. 
+
+The Docker stats source collects Docker stats from all containers on a Docker host. The polling interval is set to one minute.  
+
+If you want to change the configuration of one or both of the sources, you can create your own `sumo-sources.json` using https://github.com/SumoLogic/sumologic-collector-docker/blob/master/docker-sources/sumo-sources.json as a starting point.  
+
+For example:
+
+* If you only want to monitor Docker logs, remove the `Docker-stats` object from the `sources` array.
+
+* If you want to collect logs and events from only selected containers, set `allContainers` in the `Docker-logs` object to `false`, and specify selected containers using `specifiedContainers`.  
+
+* If you want to collect stats from only selected containers, set `allContainers` in the `Docker-stats` object to `false`, and specify selected containers using `specifiedContainers.` For more information, see [More about defining container filters]().
+
+* If you want to prevent the Docker logs source from collecting events (start, stop, and so on) set `collectEvents` in the `Docker-logs` object to `false`.
+
+For general information about configuring Docker sources, see [Docker log source](https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources/JSON-Parameters-for-Installed-Sources#Docker_Log_Source) and [Docker stats source](https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources/JSON-Parameters-for-Installed-Sources#Docker_Stats_Source) in Sumo help.
+
+When you run the image, specify the location of your `sumo-sources.json` file using the `SUMO_SOURCES_JSON` environment variable. For information about using environment variables, see the "Step 3: Run the image" section below. 
+
+### More about defining container filters 
+
+In the **Container Filter** field, you can enter a comma-separated list of one or more of the following types of filters:
+
+* A specific container name, for example, “my-container”
+* A wildcard filter, for example, “my-container-\*”
+* An exclusion (blacklist) filter, which begins with an exclamation mark, for example, ”!master-container” or “!prod-\*”
+
+For example, this filter list:
+
+`prod-*, !prod-*-mysql, master-*-app-*, sumologic-collector`
+
+will cause the source to collect from all containers whose names start with “prod-”, except those that match “prod-\*-mysql”. It will also collect from containers with names that match “master-\*-app-\*”, and from the “sumologic-collector” container.
+
+If your filter list contains only exclusions, the source will collect all containers except from those that match your exclusion filters. For example:
+
+`!container123*, !prod-*`
+
+will cause the source to exclude containers whose names begin with “container123” and “prod-”.
+
+
+
+
+## Step 3 Run the image 
+
+To run the Docker Collection image, run the following command, supplying your access ID and access key.
+
+`docker run -d -v /var/run/docker.sock:/var/run/docker.sock --name="sumo-logic-collector"  sumologic/collector:latest AccessID AccessKey`
+
+The collector can be configured either with environment variables, or a volume-mounted `user.properties` file, as described in the sections below.
+
+### Collector environment variables
+The following environment variables are supported. You can pass environment variables to the docker run command with the `-e` flag.
+
+
+|Environment Variable      |Description    |
+|--------------------------|---------------|
+|`SUMO_ACCESS_ID`            |Passes the Access ID.|
+|`SUMO_ACCESS_KEY`           |Passes the Access Key.|
+|`SUMO_CLOBBER`              | When true, if there is an existing collector with the same name, that collector will be deleted.<br><br>Default: false|
+|`SUMO_COLLECTOR_NAME`       |Configures the name of the collector. The default is set dynamically to the value in `/etc/hostname`.|
+|`SUMO_COLLECTOR_NAME_PREFIX`|Configures a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the Docker hostname.<br><br>Default: "collector_container-"<br><br>If you do not want a prefix, set the variable as follows: <br><br>`SUMO_COLLECTOR_NAME_PREFIX = ""`|
+|`SUMO_DISABLE_SCRIPTS`       |If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based script sources. When this parameter is passed, this option is removed from the Sumo web application, and script source cannot be configured.<br><br> Default: false.|
+|`SUMO_GENERATE_USER_PROPERTIES`|Set this variable to “false” if you are providing the collector configuration settings using a `user.properties` file via a Docker volume mount.|
+|`SUMO_JAVA_MEMORY_INIT`      |Sets the initial java heap size (in MB). <br><br>Default: 64|
+|`SUMO_JAVA_MEMORY_MAX`       |Sets the maximum java heap size (in MB). <br><br>Default: 128.|
+|`SUMO_PROXY_HOST`            |Sets proxy host when a proxy server is used.|
+|`SUMO_PROXY_NTLM_DOMAIN`     |Sets proxy NTLM domain when a proxy server is used with NTLM authentication.|
+|`SUMO_PROXY_PASSWORD`        |Sets proxy password when a proxy server is used with authentication.|
+|`SUMO_PROXY_PORT`            |Sets proxy port when a proxy server is used.|
+|`SUMO_PROXY_USER`            |Sets proxy user when a proxy server is used with authentication.|
+|`SUMO_SOURCES_JSON`          |Specifies the path to the `sumo-sources.json` file. <br><br>Default: `/etc/sumo-sources.json`. |
+|`SUMO_SYNC_SOURCES`          |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
+
+### Configure collector in user.properties file
+You can supply source configuration values using a `user.properties` file via a Docker volume mount. For information about supported properties, see [user.properties](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) in Sumo help. For information about Docker volumes, see [Use Volumes](https://docs.docker.com/engine/admin/volumes/volumes/) in Docker help.
+
+**Note** If you configure a source using `user.properties`, you cannot update the source configuration using the Sumo web app or the collector management API.
+
+To use a custom `user.properties` file, you must pass the environment variable `SUMO_GENERATE_USER_PROPERTIES=false`, and provide the Docker volume mount to replace the file located at `/opt/SumoCollector/config/user.properties`.
+
+For example:
+```
+docker run other options -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties sumologic/collector:$tag
+```
+### To monitor more than 40 containers.
+
+By default, you can collect from up to 40 containers. To increase the limit:
+
+1. Open a bash shell with the running collector container
+
+`docker exec -ti <container_id or name> /bin/bash`
+
+2. Edit the file located at `/opt/SumoCollector/config/collector.properties`, to add or update the `docker.maxPerContainerConnections` property. The maximum supported value is 100. 
+
+3. Exit the shell
+
+4. Restart the container
+`docker restart container_id or name`5
+
+
+## Step 4 Install Sumo app for Docker
+The Sumo app for Docker provides operational insight into your Docker containers. The app includes dashboards that allow you to view container performance statistics for CPU, memory, and the network. It also provides visibility into container events such as start, stop, and so on.
+
+For installation instructions, see [Install the Docker App](https://help.sumologic.com/Send-Data/Data-Types/Docker/02-Install-the-Docker-App).
+
+## Step 5 Run searches and use dashboards
+
+At this point, Sumo should be receiving Docker data. For an example of logs collected from Docker, see [Sample Docker messages](#sample-docker-messages). For an example query, see [Sample query for containers created or started](#sample-query-for-containers-created-or-started).  
+
+For information about the dashboards provided by the Sumo app for Docker, see [Docker App Dashboards](https://help.sumologic.com/Send-Data/Data-Types/Docker/Docker-App-Dashboards).
+
+### Sample Docker messages 
+This is an example of two Docker event logs:
+```
+{"status":"start", "id":"10adec58fa15202e06afef7b1b0b3b1464962a115ff56918444c3f22867d3f3b", "from":"hello-world", "time":1485975967}
+
+{"status":"create", "id":"045599bc4d589264658f5f7f4efa3f1e3af9088ba1f7383a160cf344e1055d46", "from":"ubuntu", "time":1485966852}
+```
+This is an example of a Docker stats message:
+```
+{"read" : "2017-02-01T19:36:48.777487188Z", "network" : {"rx_bytes":87977,"rx_dropped":0,"rx_errors":0,"rx_packets":252,"tx_bytes":146194,"tx_dropped":0,"tx_errors":0,"tx_packets":302}, "cpu_stats" : {"cpu_usage":{"percpu_usage":[9469809313],"total_usage":9469809313,"usage_in_kernelmode":1050000000,"usage_in_usermode":8410000000},"system_cpu_usage":2496992710000000,"throttling_data":{"periods":0,"throttled_periods":0,"throttled_time":0}}, "blkio_stats" : {"io_merged_recursive":[],"io_queue_recursive":[],"io_service_bytes_recursive":[],"io_service_time_recursive":[],"io_serviced_recursive":[],"io_time_recursive":[],"io_wait_time_recursive":[],"sectors_recursive":[]}, "memory_stats" : {"limit":1033252864,"max_usage":202858496,"stats":{"active_anon":86831104,"active_file":13131776,"cache":24981504,"dirty":36864,"hierarchical_memory_limit":9223372036854771712,"inactive_anon":86786048,"inactive_file":11849728,"mapped_file":6430720,"pgfault":63351,"pgmajfault":146,"pgpgin":68526,"pgpgout":20040,"rss":173617152,"rss_huge":0,"total_active_anon":86831104,"total_active_file":13131776,"total_cache":24981504,"total_dirty":36864,"total_inactive_anon":86786048,"total_inactive_file":11849728,"total_mapped_file":6430720,"total_pgfault":63351,"total_pgmajfault":146,"total_pgpgin":68526,"total_pgpgout":20040,"total_rss":173617152,"total_rss_huge":0,"total_unevictable":0,"total_writeback":0,"unevictable":0,"writeback":0},"usage":201818112}}
 ```
 
-### Variants
-
-#### Docker Collection
-
-Images tagged with `latest` or `latest-docker-sources` are available for Docker collection. When run, the Collector listens on the docker unix socket for container logs, events and stats. Plug your access ID and an access key into the commandline below:
-
-```bash
-docker run -d -v /var/run/docker.sock:/var/run/docker.sock --name="sumo-logic-collector"  sumologic/collector:latest <Access ID> <Access key>
+### Sample query for containers created or started
+```
+_sourceCategory=docker  ("\"status\":\"create\"" or "\"status\":\"start\"")  id from
+| parse "\"status\":\"*\"" as status, "\"id\":\"*\"" as container_id, "\"from\":\"*\"" as image
+| count_distinct(container_id)
 ```
 
-#### Syslog Collection
+# Use the Syslog collection image
 
-A simple "batteries included" syslog image is available and tagged `latest-syslog`. When run, the Collector listens on port 514 TCP and UDP for syslog traffic. Simply plug your access ID and an access key into the commandline below:
+The batteries-included Syslog image is tagged `latest-syslog`. When you run it, the collector listens on port 514 for TCP and UDP Syslog traffic. 
+
+To run the Syslog collection image, run the following command, supplying your access ID and access key. If you have not created the credentials yet, see [Create Sumo Access ID and Key](#step-1-create-sumo-access-id-and-key).
+
+`docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog Access ID Access key`
+
+Configuration options:
+
+* Collector configuration. You can configure optional collector behaviors by supplying environment variables on the command line, or in a `user.properties fil`e. For more information, see [Collector Environment Variables](#collector-environment-variables) and [Configure Collector in user.properties File](#configure-collector-in-user.properties-file).
+
+* Sources configuration. You can see the sumo-sources.json in the image at https://github.com/SumoLogic/sumologic-collector-docker/blob/master/syslog/sumo-sources.json. If you want to tailor the source configuration, create a new `sumo-sources.json`. When you run the image, specify the location of your `sumo-sources.json` file using the `SUMO_SOURCES_JSON` environment variable. 
+
+# Use the file collection image
+Another "batteries included" image is available and tagged latest-file. When run, the collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. 
+
+To run the file collection image, run the following command, supplying your access ID and access key. If you have not created the credentials yet, see [Create Sumo Access ID and Key](#step-1-create-sumo-access-id-and-key).
+
+`docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file Access ID Access Key`
+
+You can use the [/etc/sumo-containers.json](https://github.com/SumoLogic/sumologic-collector-docker/blob/master/file/sumo-containers.json) source file to collect logs from all containers.
+
+...
+docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/etc/sumo-containers.json sumologic/collector:latest-file Access ID Access Key 
+...
+
+Configuration options:
+
+* Collector configuration. You can configure optional collector behaviors by supplying environment variables on the command line, or in a user.properties file. For more information, see [Collector Environment Variables](#collector-environment-variables) and [Configure Collector in user.properties File](#configure-collector-in-user.properties-file).
+
+* Sources configuration. You can see the sumo-sources.json in the image at https://github.com/SumoLogic/sumologic-collector-docker/blob/master/file/sumo-containers.json. If you want to tailor the source configuration, create a new `sumo-sources.json`. When you run the image, specify the location of your `sumo-sources.json` file using the `SUMO_SOURCES_JSON` environment variable. 
 
 
-```bash
-docker run -d -p 514:514 -p 514:514/udp --name="sumo-logic-collector" sumologic/collector:latest-syslog [Access ID] [Access key]
-```
+# Create a custom Docker image
+A base image to build your own image with a custom configuration is tagged latest-no-source. You must add `/etc/sumo-sources.json` to run it. This is the configuration file that specifies the sources, metadata, and settings that the collector should monitor.
 
-#### File Collection
+Examples are available in example in [GitHub](https://github.com/SumoLogic/sumologic-collector-docker/tree/master/example), along with some example configuration files. Pick one of the examples and rename it to `sumo-sources.json` or create one from scratch. For more information, see [Use JSON to Configure Sources}(https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources) in Sumo help.
 
-Another "batteries included" image is available and tagged `latest-file`. When run, the Collector collects all files from `/tmp/clogs/`. Docker volumes need to be used to make logs available in this directory. Plug your credentials into the commandline below and adjust the volume options as needed:
+After configuring a `sumo-sources.json` file, create a Dockerfile similar to the one below:
 
-```bash
-docker run -v /tmp/clogs:/tmp/clogs -d --name="sumo-logic-collector" sumologic/collector:latest-file [Access ID] [Access key]
-```
-
-Using the `/etc/sumo-containers.json` source file you can collect logs from all containers.
-
-```bash
-docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/etc/sumo-containers.json sumologic/collector:latest-file [Access ID] [Access key]
-```
-
-
-#### Custom Configuration
-
-A base image to build your own image with a custom configuration is tagged `latest-no-source`. You need to add  `/etc/sumo-sources.json` to run it.
-Examples are available in `example` [in GitHub](https://github.com/SumoLogic/sumologic-collector-docker/tree/master/example), along with some example configuration files. Pick one of the examples and rename to `sumo-sources.json` or create one from scratch. See  our [online help](https://help.sumologic.com/Send_Data/Sources/Use_JSON_to_Configure_Sources) for more details.
-
-After configuring a `sumo-sources.json` file, create a `Dockerfile` similar to the one below:
-
-```
+...
 FROM sumologic/collector:latest-no-source
 MAINTAINER Happy Sumo Customer
 ADD sumo-sources.json /etc/sumo-sources.json
-```
+...
 
 Build an image with your configuration:
 
-```bash
-docker build --tag="yourname/sumocollector" .
-```
+`docker build --tag="yourname/sumocollector"`
 
-To run your image, plug your access ID and an access key into the commandline below to run the container:
+To run your image, run the command below, supplying your access ID and access key.  If you have not created the credentials yet, see [Create Sumo Access ID and Key](#step-1-create-sumo-access-id-and-key).
 
-```bash
-docker run -d --name="sumo-logic-collector" yourname/sumocollector [Access ID] [Access key]
-```
-
-Depending on the source setup, additional commandline parameters will be needed to create container.
+`docker run -d --name="sumo-logic-collector" yourname/sumocollector Access ID Access Key`
 
 
-#### Source Templates
+Depending on the configuration of your sources, additional command line parameters may be required to create the container.
 
-This container supports source json configuration templates allowing for string substitution using environment variables. This works by finding all files with a .json.tmpl extentions, looping through all environment variables and replacing the values. Finally the file is renamed to .json.
+## Using source templates
+The collector image supports source JSON configuration templates allowing for string substitution using environment variables. This works by finding all files with a .json.tmpl extension, looping through all environment variables and replacing the values. Finally the file is renamed to .json.
 
-NOTE: You can also create your own docker image with the tmpl files embedded rather than a volume mount.
+**Note** You can also create your own docker image with the tmpl files embedded rather than a volume mount.
 
-For example, if the container was started with the following environment variables and file /etc/sumo-containers.json.tmpl:
+For example, if the container was started with the following environment variables and file `/etc/sumo-containers.json.tmpl`:
 
 ```
-docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /path/to/sources:/sumo  -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/sumo/sources.json -e ENVIRONMENT=prod sumologic/collector:latest-file [Access ID] [Access key]
+docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -v /path/to/sources:/sumo  -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/sumo/sources.json -e ENVIRONMENT=prod sumologic/collector:latest-file Access ID Access Key
 ```
 
 File /path/to/sources/sources.json.tmpl
@@ -129,7 +258,7 @@ File /path/to/sources/sources.json.tmpl
 }
 ```
 
-The resulting output of /sumo/sources.json will be
+The resulting output of `/sumo/sources.json` will be
 ```
 {
   "api.version": "v1",
