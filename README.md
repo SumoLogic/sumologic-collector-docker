@@ -225,9 +225,9 @@ To run the file collection image, run the following command, supplying your acce
 
 You can use the [/etc/sumo-containers.json](https://github.com/SumoLogic/sumologic-collector-docker/blob/master/file/sumo-containers.json) source file to collect logs from all containers.
 
-...
+```
 docker run -v /var/lib/docker/containers:/var/lib/docker/containers:ro -d --name="sumo-logic-collector" -e SUMO_SOURCES_JSON=/etc/sumo-containers.json sumologic/collector:latest-file Access ID Access Key 
-...
+```
 
 Configuration options:
 
@@ -243,11 +243,11 @@ Examples are available in example in [GitHub](https://github.com/SumoLogic/sumol
 
 After configuring a `sumo-sources.json` file, create a Dockerfile similar to the one below:
 
-...
+```
 FROM sumologic/collector:latest-no-source
 MAINTAINER Happy Sumo Customer
 ADD sumo-sources.json /etc/sumo-sources.json
-...
+```
 
 Build an image with your configuration:
 
