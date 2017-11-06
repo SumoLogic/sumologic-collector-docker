@@ -121,6 +121,8 @@ The following environment variables are supported. You can pass environment vari
 |--------------------------|---------------|
 |`SUMO_ACCESS_ID`            |Passes the Access ID.|
 |`SUMO_ACCESS_KEY`           |Passes the Access Key.|
+|`SUMO_ACCESS_ID_FILE`       |Passes a bound file path containing Access ID.|
+|`SUMO_ACCESS_KEY_FILE`      |Passes a bound file path containing Access Key.|
 |`SUMO_CLOBBER`              | When true, if there is an existing collector with the same name, that collector will be deleted.<br><br>Default: false|
 |`SUMO_COLLECTOR_NAME`       |Configures the name of the collector. The default is set dynamically to the value in `/etc/hostname`.|
 |`SUMO_COLLECTOR_NAME_PREFIX`|Configures a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the Docker hostname.<br><br>Default: "collector_container-"<br><br>If you do not want a prefix, set the variable as follows: <br><br>`SUMO_COLLECTOR_NAME_PREFIX = ""`|
