@@ -111,6 +111,57 @@ To run the Docker Collection image, run the following command, supplying your ac
 
 `docker run -d -v /var/run/docker.sock:/var/run/docker.sock --name="sumo-logic-collector"  sumologic/collector:latest AccessID AccessKey`
 
+To prevent exposing your keys on the commandline, use the following command lines:
+
+```
+# be sure you have an up and running docker swarm cluster (1 node or more):
+docker swarm init
+# store your API keys using docker secret manager:
+echo AccessID | docker secret create sumo-access-id
+echo AccessKey | docker secret ceate sumo-access-key
+docker service create --name sumologic-collector --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock --mode global --secret sumo-access-id --secret sumo-secret-key -e SUMO_ACCESS_ID_FILE=/run/secret/sumo-access-id -e SUMO_ACCESS_KEY_FILE=/run/secrets/sumo-access-key sumologic/collector:latest
+```
+Using this commandline, the service will automatically be deployed to all nodes of your swarm cluster thanks to the _global_ mode.
+
+### Store and historize your configuration with docker-compose file and docker stack
+
+You can automate your swarm swarm cluster creation using docker-compose file together with the docker stack command and docker secret management.
+
+```
+# be sure you have an up and running docker swarm cluster (1 node or more):
+docker swarm init
+# store your API keys using docker secret manager:
+echo AccessID | docker secret create sumo-access-id
+echo AccessKey | docker secret ceate sumo-access-key
+
+cat > docker-compose.yml <<EOF
+version: '3.2'
+
+services:
+
+  summologic:
+    image: sumologic/collector:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      mode: global
+    secrets:
+      - sumo-access-id
+      - sumo-access-key
+    environment:
+      SUMO_ACCESS_ID_FILE: /run/secrets/sumo-access-id
+      SUMO_ACCESS_KEY_FILE: /run/secrets/sumo-access-key
+
+secrets:
+  sumo-access-id:
+    external: true
+  sumo-access-key:
+    external: true
+
+EOF
+docker stack deploy --compose-file docker-compose.yml sumologic
+```
+
 The collector can be configured either with environment variables, or a volume-mounted `user.properties` file, as described in the sections below.
 
 ### Collector environment variables
@@ -121,6 +172,8 @@ The following environment variables are supported. You can pass environment vari
 |--------------------------|---------------|
 |`SUMO_ACCESS_ID`            |Passes the Access ID.|
 |`SUMO_ACCESS_KEY`           |Passes the Access Key.|
+|`SUMO_ACCESS_ID_FILE`       |Passes a bound file path containing Access ID.|
+|`SUMO_ACCESS_KEY_FILE`      |Passes a bound file path containing Access Key.|
 |`SUMO_CLOBBER`              | When true, if there is an existing collector with the same name, that collector will be deleted.<br><br>Default: false|
 |`SUMO_COLLECTOR_NAME`       |Configures the name of the collector. The default is set dynamically to the value in `/etc/hostname`.|
 |`SUMO_COLLECTOR_NAME_PREFIX`|Configures a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the Docker hostname.<br><br>Default: "collector_container-"<br><br>If you do not want a prefix, set the variable as follows: <br><br>`SUMO_COLLECTOR_NAME_PREFIX = ""`|
@@ -147,6 +200,7 @@ For example:
 ```
 docker run other options -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties sumologic/collector:$tag
 ```
+
 ### To monitor more than 40 containers
 
 By default, you can collect from up to 40 containers. To increase the limit:

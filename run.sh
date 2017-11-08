@@ -1,5 +1,15 @@
 #!/bin/bash
 
+
+if [[ $SUMO_ACCESS_ID_FILE ]]; then
+  export SUMO_ACCESS_ID=$(cat $SUMO_ACCESS_ID_FILE)
+fi
+
+if [[ $SUMO_ACCESS_KEY_FILE ]]; then
+  export SUMO_ACCESS_KEY=$(cat $SUMO_ACCESS_KEY_FILE)
+fi
+
+
 SUMO_GENERATE_USER_PROPERTIES=${SUMO_GENERATE_USER_PROPERTIES:=true}
 SUMO_ACCESS_ID=${SUMO_ACCESS_ID:=$1}
 SUMO_ACCESS_KEY=${SUMO_ACCESS_KEY:=$2}
@@ -11,7 +21,8 @@ SUMO_SYNC_SOURCES=${SUMO_SYNC_SOURCES:=false}
 generate_user_properties_file() {
     if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
       echo "FATAL: Please provide credentials, either via the SUMO_ACCESS_ID and SUMO_ACCESS_KEY environment variables,"
-      echo "       or as the first two command line arguments!"
+      echo "       as the first two command line arguments,"
+      echo "       or in files references by SUMO_ACCESS_ID_FILE and SUMO_ACCESS_KEY_FILE!"
       exit 1
     fi
 
