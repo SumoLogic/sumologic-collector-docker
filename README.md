@@ -8,7 +8,7 @@
     + [Collector environment variables](#collector-environment-variables)
     + [Configure collector in user.properties file](#configure-collector-in-userproperties-file)
     + [To monitor more than 40 containers](#to-monitor-more-than-40-containers)
-    + [To avoid exposing your keys on the command line] (#to-avoid-exposing-your-keys-on-the-command-line)
+    + [To avoid exposing your keys on the command line](#to-avoid-exposing-your-keys-on-the-command-line)
   * [Step 4 Install Sumo app for Docker](#step-4-install-sumo-app-for-docker)
   * [Step 5 Run searches and use dashboards](#step-5-run-searches-and-use-dashboards)
     + [Sample Docker messages](#sample-docker-messages)
