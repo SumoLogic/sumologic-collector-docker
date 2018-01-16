@@ -207,7 +207,7 @@ version: '3.2'
 
 services:
 
-  summologic:
+  sumologic:
     image: sumologic/collector:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
