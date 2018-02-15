@@ -20,10 +20,10 @@ done
 pushd $prj_dir
 docker build \
     --build-arg BUILD_NUMBER=$build_number \
-    -t $image_name:$tag \
+    -t $image_name:$build_number \
     .
 popd
 
 if [ "$push_to_registry" = true ]; then
-    docker push $image_name:$tag
+    docker push $image_name:$build_number
 fi
