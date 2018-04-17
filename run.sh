@@ -49,9 +49,9 @@ generate_user_properties_file() {
 
         OLD_IFS=$IFS
         IFS=$'\n'
-        while read line; do
-          line_escape_backslashes=${line//\\/\\\\\\\\}
-          echo $(eval echo "\"${line_escape_backslashes//\"/\\\"}\"") >> ${to}
+        while read -r line; do
+          line_escape_backslashes=${line//\\/\\\\}
+          printf "%s\n" "$(eval echo "\"${line_escape_backslashes//\"/\\\"}\"")" >> ${to}
         done <${from}
         IFS=${OLD_IFS}
 
