@@ -116,6 +116,5 @@ $SUMO_GENERATE_USER_PROPERTIES && {
 }
 
 
-# The -t flag will force the collector to run as ephemeral
 # Don't leave our shell hanging around
-exec /opt/SumoCollector/collector console -- -t
+exec /opt/SumoCollector/collector console
