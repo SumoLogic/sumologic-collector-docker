@@ -88,7 +88,7 @@ generate_user_properties_file() {
         ["SUMO_PROXY_PORT"]="proxyPort"
         ["SUMO_PROXY_USER"]="proxyUser"
         ["SUMO_PROXY_PASSWORD"]="proxyPassword"
-        ["SUMO_PROXY_NTLM_DOMAIN" ]="proxyNtlmDomain"
+        ["SUMO_PROXY_NTLM_DOMAIN"]="proxyNtlmDomain"
         ["SUMO_CLOBBER"]="clobber"
         ["SUMO_DISABLE_SCRIPTS"]="disableScriptSource"
         ["SUMO_JAVA_MEMORY_INIT"]="wrapper.java.initmemory"
