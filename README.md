@@ -301,7 +301,7 @@ Configuration options:
 # Create a custom Docker image
 A base image to build your own image with a custom configuration is tagged latest-no-source. You must add `/etc/sumo-sources.json` to run it. This is the configuration file that specifies the sources, metadata, and settings that the collector should monitor.
 
-Examples are available in example in [GitHub](https://github.com/SumoLogic/sumologic-collector-docker/tree/master/example), along with some example configuration files. Pick one of the examples and rename it to `sumo-sources.json` or create one from scratch. For more information, see [Use JSON to Configure Sources}(https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources) in Sumo help.
+Examples are available in example in [GitHub](https://github.com/SumoLogic/sumologic-collector-docker/tree/master/example), along with some example configuration files. Pick one of the examples and rename it to `sumo-sources.json` or create one from scratch. For more information, see [Use JSON to Configure Sources](https://help.sumologic.com/Send-Data/Sources/03Use-JSON-to-Configure-Sources) in Sumo help.
 
 After configuring a `sumo-sources.json` file, create a Dockerfile similar to the one below:
 
