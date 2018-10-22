@@ -14,13 +14,7 @@ SUMO_ACCESS_ID=${SUMO_ACCESS_ID:=$1}
 SUMO_ACCESS_KEY=${SUMO_ACCESS_KEY:=$2}
 SUMO_RECEIVER_URL=${SUMO_RECEIVER_URL:=https://collectors.sumologic.com}
 # Handle case for an empty string
-if [[ ! -v SUMO_COLLECTOR_NAME_PREFIX ]]; then
-    SUMO_COLLECTOR_NAME='collector_container-'${SUMO_COLLECTOR_NAME:=$(cat /etc/hostname)}
-elif [[ -z "$SUMO_COLLECTOR_NAME_PREFIX" ]]; then
-    SUMO_COLLECTOR_NAME=${SUMO_COLLECTOR_NAME:=$(cat /etc/hostname)}
-else
-    SUMO_COLLECTOR_NAME=${SUMO_COLLECTOR_NAME_PREFIX:='collector_container-'}${SUMO_COLLECTOR_NAME:=$(cat /etc/hostname)}
-fi
+SUMO_COLLECTOR_NAME=${SUMO_COLLECTOR_NAME_PREFIX='collector_container-'}${SUMO_COLLECTOR_NAME:=$(cat /etc/hostname)}
 SUMO_SOURCES_JSON=${SUMO_SOURCES_JSON:=/etc/sumo-sources.json}
 SUMO_SYNC_SOURCES=${SUMO_SYNC_SOURCES:=false}
 SUMO_COLLECTOR_EPHEMERAL=${SUMO_COLLECTOR_EPHEMERAL:=true}
