@@ -34,7 +34,7 @@ RUN apt-get update && \
 
 COPY ./sfiq/sumo-sources.json /etc/
 
-VOLUME /logs
+VOLUME /host
 
 EXPOSE 514/udp
 EXPOSE 514
