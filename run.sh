@@ -1,10 +1,28 @@
 #!/bin/bash
 
-sumo_key=$(python sfiq/get_key.py)
-IFS=':'; sumo_key_arr=($sumo_key); unset IFS;
+#sumo_key=$(python sfiq/get_key.py)
+#IFS=':'; sumo_key_arr=($sumo_key); unset IFS;
 
-export SUMO_ACCESS_ID=${sumo_key_arr[0]}
-export SUMO_ACCESS_KEY=${sumo_key_arr[1]}
+#export SUMO_ACCESS_ID=${sumo_key_arr[0]}
+#export SUMO_ACCESS_KEY=${sumo_key_arr[1]}
+
+# get customized sumo category metadata from ec2 tags
+tags_str=$(/usr/local/bin/aws-instance-metadata-reader)
+IFS=',' read -ra tags <<< ${tags_str}
+for tag_pair in ${tags[@]}; do
+pair=(${tag_pair//:/ })
+if [ ${#pair[@]} -eq 2 ]; then # ignore aws built-in tags with multiple `:`s in tag key
+  if [ "${pair[0]}" == "SumoCategory" ]; then
+     sumo_category="${pair[1]}"
+     sed -i.bk 's,sfiq/nomad,'"${sumo_category}"',g' /etc/sumo-sources.json
+  fi
+fi
+done
+
+# get sumo creds from vault
+viq login
+export SUMO_ACCESS_ID=$(viq kv get -p ops_secret/sumologic/access_id)
+export SUMO_ACCESS_KEY=$(viq kv get -p ops_secret/sumologic/access_key)
 
 access_id=${SUMO_ACCESS_ID:=$1}
 access_key=${SUMO_ACCESS_KEY:=$2}

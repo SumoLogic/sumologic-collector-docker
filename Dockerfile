@@ -20,16 +20,18 @@ ENTRYPOINT ["/bin/bash", "run.sh"]
 
 # SFIQ customization
 RUN apt-get update && \
-    apt-get install -y python curl && \
-    curl -ksL https://bootstrap.pypa.io/get-pip.py | python
+    apt-get install -y curl && \
+    curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/riqca/riqca.crt -o /usr/local/share/ca-certificates/riqca.crt && \
+    curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/ecpca/ecpca.crt -o /usr/local/share/ca-certificates/ecpca.crt && \
+    update-ca-certificates && \
+    curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/default/linux/go-get-yourself/latest/go-get-yourself.d04e67a -o /usr/local/bin/go-get-yourself && \
+    chmod +x /usr/local/bin/go-get-yourself && \
+    curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/aws-instance-metadata-reader/stable/linux/amd64/aws-instance-metadata-reader -o /usr/local/bin/aws-instance-metadata-reader && \
+    go-get-yourself get --projectName viq --os linux --version v0.9.1 && \
+    mv viq /usr/local/bin/ && \
+    go-get-yourself get --projectName crypter-client-go --version v1.0.3 && \
+    mv crypter-client-go /usr/local/bin/crypter
 
-# internal deps, we do NOT want cache for them
-# let's bust the cache by referencing an ARG that's supposed to be different for each build
-ARG BUILD_NUMBER
-COPY ./sfiq/requirement_internal.txt sfiq/requirement_internal_${BUILD_NUMBER}.txt
-RUN pip install -r sfiq/requirement_internal_${BUILD_NUMBER}.txt
-
-COPY ./sfiq/get_key.py sfiq/
 COPY ./sfiq/sumo-sources.json /etc/
 
 VOLUME /logs
