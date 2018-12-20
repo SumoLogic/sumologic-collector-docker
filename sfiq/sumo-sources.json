@@ -4,11 +4,11 @@
     {
       "sourceType" : "LocalFile",
       "name": "localfile",
-      "pathExpression": "/host/nomad/*/alloc/logs/*",
+      "pathExpression": "SUMO_MONITOR_PATH_PLACEHOLDER",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
-      "category": "sfiq/nomad"
+      "category": "SUMO_CATEGORY_PLACEHOLDER"
     },
     {
       "sourceType": "Syslog",
@@ -17,7 +17,7 @@
       "protocol": "TCP",
       "encoding": "UTF-8",
       "forceTimeZone": false,
-      "category": "sfiq/nomad"
+      "category": "SUMO_CATEGORY_PLACEHOLDER"
     },
     {
       "sourceType": "Syslog",
@@ -26,7 +26,7 @@
       "protocol": "UDP",
       "encoding": "UTF-8",
       "forceTimeZone": false,
-      "category": "sfiq/nomad"
+      "category": "SUMO_CATEGORY_PLACEHOLDER"
     }
   ]
 }

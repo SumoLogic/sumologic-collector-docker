@@ -3,10 +3,13 @@
 # SFIQ customization: begin
 ################################################################################
 
+# read EC2 tags
+tags_str=$(/usr/local/bin/aws-instance-metadata-reader)
+IFS=',' read -ra tags <<< ${tags_str}
+
 # get customized sumo category metadata, first from env var, then from ec2 tags
+# before using the default value
 if [[ -z "$SUMO_CATEGORY" ]]; then
-  tags_str=$(/usr/local/bin/aws-instance-metadata-reader)
-  IFS=',' read -ra tags <<< ${tags_str}
   for tag_pair in ${tags[@]}; do
   pair=(${tag_pair//:/ })
   if [ ${#pair[@]} -eq 2 ]; then # ignore aws built-in tags with multiple `:`s in tag key
@@ -17,9 +20,31 @@ if [[ -z "$SUMO_CATEGORY" ]]; then
   done
 fi
 
+SUMO_CATEGORY=${SUMO_CATEGORY:-ap/default}
+
 if [[ -n "$SUMO_CATEGORY" ]]; then
-    sed -i.bk 's,sfiq/nomad,'"${SUMO_CATEGORY}"',g' /etc/sumo-sources.json
+    sed -i.bk 's,SUMO_CATEGORY_PLACEHOLDER,'"${SUMO_CATEGORY}"',g' /etc/sumo-sources.json
 fi
+
+# get customized sumo monitor file path expression, first from env var, then from ec2 tags
+# before using the default value
+if [[ -z "$SUMO_MONITOR_PATH" ]]; then
+  for tag_pair in ${tags[@]}; do
+  pair=(${tag_pair//:/ })
+  if [ ${#pair[@]} -eq 2 ]; then # ignore aws built-in tags with multiple `:`s in tag key
+    if [ "${pair[0]}" == "SumoMonitorPath" ]; then
+       SUMO_MONITOR_PATH="${pair[1]}"
+    fi
+  fi
+  done
+fi
+
+SUMO_MONITOR_PATH=${SUMO_MONITOR_PATH:-/logs/*/*.log}
+
+if [[ -n "$SUMO_MONITOR_PATH" ]]; then
+    sed -i.bk 's,SUMO_MONITOR_PATH_PLACEHOLDER,'"${SUMO_MONITOR_PATH}"',g' /etc/sumo-sources.json
+fi
+
 
 # get sumo creds from vault
 viq login
