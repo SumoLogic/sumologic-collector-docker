@@ -1,10 +1,58 @@
 #!/bin/bash
+################################################################################
+# SFIQ customization: begin
+################################################################################
 
-sumo_key=$(python sfiq/get_key.py)
-IFS=':'; sumo_key_arr=($sumo_key); unset IFS;
+# read EC2 tags
+tags_str=$(/usr/local/bin/aws-instance-metadata-reader)
+IFS=',' read -ra tags <<< ${tags_str}
 
-export SUMO_ACCESS_ID=${sumo_key_arr[0]}
-export SUMO_ACCESS_KEY=${sumo_key_arr[1]}
+# get customized sumo category metadata, first from env var, then from ec2 tags
+# before using the default value
+if [[ -z "$SUMO_CATEGORY" ]]; then
+  for tag_pair in ${tags[@]}; do
+  pair=(${tag_pair//:/ })
+  if [ ${#pair[@]} -eq 2 ]; then # ignore aws built-in tags with multiple `:`s in tag key
+    if [ "${pair[0]}" == "SumoCategory" ]; then
+       SUMO_CATEGORY="${pair[1]}"
+    fi
+  fi
+  done
+fi
+
+SUMO_CATEGORY=${SUMO_CATEGORY:-ap/default}
+
+if [[ -n "$SUMO_CATEGORY" ]]; then
+    sed -i.bk 's,SUMO_CATEGORY_PLACEHOLDER,'"${SUMO_CATEGORY}"',g' /etc/sumo-sources.json
+fi
+
+# get customized sumo monitor file path expression, first from env var, then from ec2 tags
+# before using the default value
+if [[ -z "$SUMO_MONITOR_PATH" ]]; then
+  for tag_pair in ${tags[@]}; do
+  pair=(${tag_pair//:/ })
+  if [ ${#pair[@]} -eq 2 ]; then # ignore aws built-in tags with multiple `:`s in tag key
+    if [ "${pair[0]}" == "SumoMonitorPath" ]; then
+       SUMO_MONITOR_PATH="${pair[1]}"
+    fi
+  fi
+  done
+fi
+
+SUMO_MONITOR_PATH=${SUMO_MONITOR_PATH:-/logs/*/*.log}
+
+if [[ -n "$SUMO_MONITOR_PATH" ]]; then
+    sed -i.bk 's,SUMO_MONITOR_PATH_PLACEHOLDER,'"${SUMO_MONITOR_PATH}"',g' /etc/sumo-sources.json
+fi
+
+
+# get sumo creds from vault
+viq login
+export SUMO_ACCESS_ID=$(viq kv get -p ops_secret/sumologic/access_id)
+export SUMO_ACCESS_KEY=$(viq kv get -p ops_secret/sumologic/access_key)
+################################################################################
+# SFIQ customization: end
+################################################################################
 
 access_id=${SUMO_ACCESS_ID:=$1}
 access_key=${SUMO_ACCESS_KEY:=$2}
@@ -23,8 +71,6 @@ if [ ! -e $sources_json ]; then
     echo "FATAL: Unable to find $sources_json - please make sure you include it in your image!"
     exit 1
 fi
-
-sed -i.bk "s,dcos_default_category,$SUMO_CATEGORY," $sources_json
 
 export SUMO_SOURCES_JSON=${sources_json}
 
