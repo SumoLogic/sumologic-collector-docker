@@ -21,6 +21,7 @@ ENTRYPOINT ["/bin/bash", "run.sh"]
 # SFIQ customization
 RUN apt-get update && \
     apt-get install -y curl && \
+    curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/apca/apca.crt -o /usr/local/share/ca-certificates/apca.crt && \
     curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/riqca/riqca.crt -o /usr/local/share/ca-certificates/riqca.crt && \
     curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/ecpca/ecpca.crt -o /usr/local/share/ca-certificates/ecpca.crt && \
     update-ca-certificates && \
@@ -34,7 +35,7 @@ RUN apt-get update && \
 
 COPY ./sfiq/sumo-sources.json /etc/
 
-VOLUME /host
+VOLUME /logs
 
 EXPOSE 514/udp
 EXPOSE 514
