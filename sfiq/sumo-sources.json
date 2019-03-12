@@ -4,7 +4,7 @@
     {
       "sourceType" : "LocalFile",
       "name": "host-agent-log",
-      "pathExpression": "/logs/host/agent/*/current",
+      "pathExpression": "/host/log/agent/*/current",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
@@ -13,7 +13,7 @@
     {
       "sourceType" : "LocalFile",
       "name": "host-app-log",
-      "pathExpression": "/logs/host/apps/*.log",
+      "pathExpression": "/host/log/apps/*.log",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
