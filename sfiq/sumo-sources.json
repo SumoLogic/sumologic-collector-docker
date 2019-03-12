@@ -12,8 +12,8 @@
     },
     {
       "sourceType" : "LocalFile",
-      "name": "host-extra-log",
-      "pathExpression": "/logs/host/extra/*.log",
+      "name": "host-app-log",
+      "pathExpression": "/logs/host/apps/*.log",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
