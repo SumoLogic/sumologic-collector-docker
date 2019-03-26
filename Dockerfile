@@ -1,7 +1,7 @@
 # Sumo Logic Collector Docker Image
 # Version 0.1
 
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 MAINTAINER Sumo Logic <docker@sumologic.com>
 
 ENV DEBIAN_FRONTEND noninteractive
