@@ -6,6 +6,7 @@ MAINTAINER Sumo Logic <docker@sumologic.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --quiet && \
+ apt-get install -y --no-install-recommends apt-utils && \
  apt-get upgrade --quiet --allow-downgrades --allow-remove-essential --allow-change-held-packages -y && \
  apt-get install --quiet --allow-downgrades --allow-remove-essential --allow-change-held-packages -y wget && \
  wget -q -O /tmp/collector.deb https://collectors.sumologic.com/rest/download/deb/64 && \
@@ -14,5 +15,5 @@ RUN apt-get update --quiet && \
  apt-get clean --quiet && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY run.sh /run.sh 
+COPY run.sh /run.sh
 ENTRYPOINT ["/bin/bash", "/run.sh"]
