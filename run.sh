@@ -18,6 +18,7 @@ SUMO_COLLECTOR_NAME=${SUMO_COLLECTOR_NAME_PREFIX='collector_container-'}${SUMO_C
 SUMO_SOURCES_JSON=${SUMO_SOURCES_JSON:=/etc/sumo-sources.json}
 SUMO_SYNC_SOURCES=${SUMO_SYNC_SOURCES:=false}
 SUMO_COLLECTOR_EPHEMERAL=${SUMO_COLLECTOR_EPHEMERAL:=true}
+SUMO_COLLECTOR_HOSTNAME=${SUMO_COLLECTOR_HOSTNAME:=$(cat /etc/hostname)}
 
 generate_user_properties_file() {
     if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
@@ -81,6 +82,7 @@ generate_user_properties_file() {
         ["SUMO_ACCESS_KEY"]="accesskey"
         ["SUMO_RECEIVER_URL"]="url"
         ["SUMO_COLLECTOR_NAME"]="name"
+        ["SUMO_COLLECTOR_HOSTNAME"]="hostName"
         ["SUMO_SOURCES_JSON"]="sources"
         ["SUMO_SYNC_SOURCES"]="syncSources"
         ["SUMO_COLLECTOR_EPHEMERAL"]="ephemeral"
