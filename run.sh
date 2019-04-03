@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [[ $SUMO_ACCESS_ID_FILE ]]; then
   export SUMO_ACCESS_ID=$(cat $SUMO_ACCESS_ID_FILE)
 fi
@@ -38,7 +37,6 @@ generate_user_properties_file() {
         for f in $(find ${SUMO_SOURCES_JSON} -name '*.tmpl'); do TEMPLATE_FILES+=(${f}); done
     fi
 
-
     for from in "${TEMPLATE_FILES[@]}"
     do
         # Replace all env variables and remove .tmpl extension
@@ -60,7 +58,6 @@ generate_user_properties_file() {
         echo "INFO: Replacing environment variables from ${from} into ${to}"
 
     done
-
 
     if [ ! -e "${SUMO_SOURCES_JSON}" ]; then
       echo "FATAL: Unable to find $SUMO_SOURCES_JSON - please make sure you include it in your image!"
@@ -90,7 +87,7 @@ generate_user_properties_file() {
         ["SUMO_PROXY_PORT"]="proxyPort"
         ["SUMO_PROXY_USER"]="proxyUser"
         ["SUMO_PROXY_PASSWORD"]="proxyPassword"
-        ["SUMO_PROXY_NTLM_DOMAIN" ]="proxyNtlmDomain"
+        ["SUMO_PROXY_NTLM_DOMAIN"]="proxyNtlmDomain"
         ["SUMO_CLOBBER"]="clobber"
         ["SUMO_DISABLE_SCRIPTS"]="disableScriptSource"
         ["SUMO_JAVA_MEMORY_INIT"]="wrapper.java.initmemory"
@@ -116,7 +113,6 @@ generate_user_properties_file() {
 $SUMO_GENERATE_USER_PROPERTIES && {
     generate_user_properties_file
 }
-
 
 # Don't leave our shell hanging around
 exec /opt/SumoCollector/collector console
