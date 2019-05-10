@@ -112,10 +112,11 @@ generate_user_properties_file() {
 # If the user didn't supply their own user.properties file, generate it
 $SUMO_GENERATE_USER_PROPERTIES && {
     generate_user_properties_file
-    if [ "${SUMO_FIPS_JCE}" == "true" ]; then
-        /opt/SumoCollector/script/configureFipsMode.sh
-    fi
 }
+
+if [ "${SUMO_FIPS_JCE}" == "true" ]; then
+    /opt/SumoCollector/script/configureFipsMode.sh
+fi
 
 # Don't leave our shell hanging around
 exec /opt/SumoCollector/collector console
