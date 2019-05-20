@@ -130,6 +130,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_COLLECTOR_EPHEMERAL`  |When true, the collector will be deleted after it goes offline for 12 hours. <br><br>Default: true.|
 |`SUMO_COLLECTOR_NAME`       |Configures the name of the collector. The default is set dynamically to the value in `/etc/hostname`.|
 |`SUMO_COLLECTOR_NAME_PREFIX`|Configures a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the Docker hostname.<br><br>Default: "collector_container-"<br><br>If you do not want a prefix, set the variable as follows: <br><br>`SUMO_COLLECTOR_NAME_PREFIX = ""`|
+|`SUMO_COLLECTOR_HOSTNAME`   |Sets the host name of the machine on which the Collector container is running.<br><br> Default: The container ID.|
 |`SUMO_DISABLE_SCRIPTS`       |If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based script sources. When this parameter is passed, this option is removed from the Sumo web application, and script source cannot be configured.<br><br> Default: false.|
 |`SUMO_GENERATE_USER_PROPERTIES`|Set this variable to “false” if you are providing the collector configuration settings using a `user.properties` file via a Docker volume mount.|
 |`SUMO_JAVA_MEMORY_INIT`      |Sets the initial java heap size (in MB). <br><br>Default: 64|
