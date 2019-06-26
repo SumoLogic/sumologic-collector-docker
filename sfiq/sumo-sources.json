@@ -13,7 +13,7 @@
     {
       "sourceType" : "LocalFile",
       "name": "host-app-log",
-      "pathExpression": "/host/log/app/*/*.log",
+      "pathExpression": "/host/log/apps/*/*.log",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
