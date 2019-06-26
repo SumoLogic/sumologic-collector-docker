@@ -12,6 +12,15 @@
     },
     {
       "sourceType" : "LocalFile",
+      "name": "host-agent-log-extra",
+      "pathExpression": "/host/log/agent/*/*.log",
+      "multilineProcessingEnabled": true,
+      "automaticDateParsing": true,
+      "forceTimeZone": false,
+      "category": "SUMO_CATEGORY_PLACEHOLDER"
+    },
+    {
+      "sourceType" : "LocalFile",
       "name": "host-app-log",
       "pathExpression": "/host/log/apps/*/*.log",
       "multilineProcessingEnabled": true,
@@ -21,7 +30,7 @@
     },
     {
       "sourceType" : "LocalFile",
-      "name": "app-log",
+      "name": "dynamic-app-log",
       "pathExpression": "SUMO_MONITOR_PATH_PLACEHOLDER",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
