@@ -8,7 +8,7 @@
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
+      "category": "ap/default"
     },
     {
       "sourceType" : "LocalFile",
@@ -17,7 +17,7 @@
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
+      "category": "ap/default"
     },
     {
       "sourceType" : "LocalFile",
@@ -26,7 +26,7 @@
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
+      "category": "ap/default"
     },
     {
       "sourceType": "Syslog",
@@ -35,7 +35,7 @@
       "protocol": "TCP",
       "encoding": "UTF-8",
       "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
+      "category": "ap/default"
     },
     {
       "sourceType": "Syslog",
@@ -44,7 +44,7 @@
       "protocol": "UDP",
       "encoding": "UTF-8",
       "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
+      "category": "ap/default"
     }
   ]
 }

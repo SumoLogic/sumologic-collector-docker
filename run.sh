@@ -23,7 +23,7 @@ fi
 SUMO_CATEGORY=${SUMO_CATEGORY:-ap/default}
 
 if [[ -n "$SUMO_CATEGORY" ]]; then
-    sed -i.bk 's,SUMO_CATEGORY_PLACEHOLDER,'"${SUMO_CATEGORY}"',g' /etc/sumo-sources.json
+    sed -i.bk 's,ap/default,'"${SUMO_CATEGORY}"',g' /etc/sumo-sources.json
 fi
 
 # get customized sumo monitor file path expression, first from env var, then from ec2 tags
