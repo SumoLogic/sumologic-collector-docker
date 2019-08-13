@@ -3,25 +3,7 @@
   "sources": [
     {
       "sourceType" : "LocalFile",
-      "name": "host-agent-log",
-      "pathExpression": "/host/log/agent/*/current",
-      "multilineProcessingEnabled": true,
-      "automaticDateParsing": true,
-      "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
-    },
-    {
-      "sourceType" : "LocalFile",
-      "name": "host-agent-log-extra",
-      "pathExpression": "/host/log/agent/*/*.log",
-      "multilineProcessingEnabled": true,
-      "automaticDateParsing": true,
-      "forceTimeZone": false,
-      "category": "SUMO_CATEGORY_PLACEHOLDER"
-    },
-    {
-      "sourceType" : "LocalFile",
-      "name": "host-app-log",
+      "name": "app-host-file-log",
       "pathExpression": "/host/log/apps/*/*.log",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
@@ -30,8 +12,17 @@
     },
     {
       "sourceType" : "LocalFile",
-      "name": "dynamic-app-log",
-      "pathExpression": "SUMO_MONITOR_PATH_PLACEHOLDER",
+      "name": "app-nomad-std-log",
+      "pathExpression": "/host/log/nomad/*/alloc/logs/*.current",
+      "multilineProcessingEnabled": true,
+      "automaticDateParsing": true,
+      "forceTimeZone": false,
+      "category": "SUMO_CATEGORY_PLACEHOLDER"
+    },
+    {
+      "sourceType" : "LocalFile",
+      "name": "app-nomad-file-log",
+      "pathExpression": "/host/log/nomad/*/alloc/logs/*.log",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,

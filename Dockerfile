@@ -15,7 +15,7 @@ RUN apt-get update --quiet && \
  apt-get clean --quiet && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY run.sh run.sh 
+COPY run.sh run.sh
 ENTRYPOINT ["/bin/bash", "run.sh"]
 
 # SFIQ customization
@@ -28,6 +28,7 @@ RUN apt-get update && \
     curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/default/linux/go-get-yourself/latest/go-get-yourself.d04e67a -o /usr/local/bin/go-get-yourself && \
     chmod +x /usr/local/bin/go-get-yourself && \
     curl -sL https://s3-us-west-2.amazonaws.com/infra-distributions/aws-instance-metadata-reader/stable/linux/amd64/aws-instance-metadata-reader -o /usr/local/bin/aws-instance-metadata-reader && \
+    chmod +x usr/local/bin/aws-instance-metadata-reader && \
     go-get-yourself get --projectName viq --os linux --version v0.9.1 && \
     mv viq /usr/local/bin/ && \
     go-get-yourself get --projectName crypter-client-go --version v1.0.3 && \
