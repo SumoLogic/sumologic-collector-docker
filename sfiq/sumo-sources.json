@@ -13,7 +13,7 @@
     {
       "sourceType" : "LocalFile",
       "name": "app-nomad-std-log",
-      "pathExpression": "/host/log/nomad/*/alloc/logs/*.current",
+      "pathExpression": "/host/log/nomad/*/alloc/logs/*.std*.0",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
