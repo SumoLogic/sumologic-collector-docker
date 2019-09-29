@@ -45,12 +45,11 @@ if [[ -n "$SUMO_MONITOR_PATH" ]]; then
     sed -i.bk 's,SUMO_MONITOR_PATH_PLACEHOLDER,'"${SUMO_MONITOR_PATH}"',g' /etc/sumo-sources.json
 fi
 
-
 # get sumo creds from vault
 if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
   viq login
-  export SUMO_ACCESS_ID=$(viq kv get -p ops_secret/sumologic/access_id)
-  export SUMO_ACCESS_KEY=$(viq kv get -p ops_secret/sumologic/access_key)
+  export SUMO_ACCESS_ID=$(viq kv get -p $VAULT_MOUNT_OPS_SECRET/sumologic/access_id)
+  export SUMO_ACCESS_KEY=$(viq kv get -p $VAULT_MOUNT_OPS_SECRET/sumologic/access_key)
 fi
 ################################################################################
 # SFIQ customization: end
