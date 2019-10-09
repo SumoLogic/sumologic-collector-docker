@@ -22,7 +22,7 @@
     {
       "sourceType" : "LocalFile",
       "name": "app-nomad-file-log",
-      "pathExpression": "/host/log/nomad/*/alloc/logs/*.log",
+      "pathExpression": "/host/log/nomad/*/*.log",
       "multilineProcessingEnabled": true,
       "automaticDateParsing": true,
       "forceTimeZone": false,
