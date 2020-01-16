@@ -9,6 +9,7 @@ if [[ $SUMO_ACCESS_KEY_FILE ]]; then
 fi
 
 SUMO_GENERATE_USER_PROPERTIES=${SUMO_GENERATE_USER_PROPERTIES:=true}
+SUMO_GENERATE_COLLECTOR_PROPERTIES=${SUMO_GENERATE_COLLECTOR_PROPERTIES:=true}
 SUMO_ACCESS_ID=${SUMO_ACCESS_ID:=$1}
 SUMO_ACCESS_KEY=${SUMO_ACCESS_KEY:=$2}
 SUMO_RECEIVER_URL=${SUMO_RECEIVER_URL:=https://collectors.sumologic.com}
@@ -18,6 +19,27 @@ SUMO_SOURCES_JSON=${SUMO_SOURCES_JSON:=/etc/sumo-sources.json}
 SUMO_SYNC_SOURCES=${SUMO_SYNC_SOURCES:=false}
 SUMO_COLLECTOR_EPHEMERAL=${SUMO_COLLECTOR_EPHEMERAL:=true}
 SUMO_COLLECTOR_HOSTNAME=${SUMO_COLLECTOR_HOSTNAME:=$(cat /etc/hostname)}
+
+generate_collector_properties_file() {
+    # Read values from ENV variables and place them in collector/config/collector.properties file
+    declare -A SUPPORTED_OPTIONS
+    SUPPORTED_OPTIONS=(
+        ["SUMO_UDP_READ_BUFFER_SIZE"]="collector.syslog.udp.readBufferSize"
+    )
+    COLLECTOR_PROPERTIES=""
+
+    for key in "${!SUPPORTED_OPTIONS[@]}"
+    do
+        value=${!key}
+        if [ -n "${value}" ]; then
+            COLLECTOR_PROPERTIES="${COLLECTOR_PROPERTIES}${SUPPORTED_OPTIONS[$key]}=${value}\n"
+        fi
+    done
+
+    if [ -n "${COLLECTOR_PROPERTIES}" ]; then
+        echo -e ${COLLECTOR_PROPERTIES} > /opt/SumoCollector/config/collector.properties
+    fi
+}
 
 generate_user_properties_file() {
     if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
@@ -109,9 +131,14 @@ generate_user_properties_file() {
     fi
 }
 
-# If the user didn't supply their own user.properties file, generate it
+# # If the user didn't supply their own user.properties file, generate it
 $SUMO_GENERATE_USER_PROPERTIES && {
     generate_user_properties_file
+}
+
+# If the user didn't supply their own collector.properties file, generate it
+$SUMO_GENERATE_COLLECTOR_PROPERTIES && {
+    generate_collector_properties_file
 }
 
 if [ "${SUMO_FIPS_JCE}" == "true" ]; then
