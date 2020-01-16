@@ -143,6 +143,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_SOURCES_JSON`          |Specifies the path to the `sumo-sources.json` file. <br><br>Default: `/etc/sumo-sources.json`. |
 |`SUMO_SYNC_SOURCES`          |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
 |`SUMO_FIPS_JCE`              |If "true", the FIPS 140-2 compliant Java Cryptography Extension (JCE) would be used to encrypt the data. <br><br>Default: false|
+|`SUMO_UDP_READ_BUFFER_SIZE`  |Sets the datagram size of the UDP messages (in bytes) <br><br>Default: 2048<br><br>Max: 65535|
 
 ### Configure collector in user.properties file
 You can supply source configuration values using a `user.properties` file via a Docker volume mount. For information about supported properties, see [user.properties](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) in Sumo help. For information about Docker volumes, see [Use Volumes](https://docs.docker.com/engine/admin/volumes/volumes/) in Docker help.
