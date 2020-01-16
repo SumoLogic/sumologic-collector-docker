@@ -131,7 +131,7 @@ generate_user_properties_file() {
     fi
 }
 
-# # If the user didn't supply their own user.properties file, generate it
+# If the user didn't supply their own user.properties file, generate it
 $SUMO_GENERATE_USER_PROPERTIES && {
     generate_user_properties_file
 }
