@@ -133,6 +133,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_COLLECTOR_HOSTNAME`   |Sets the host name of the machine on which the Collector container is running.<br><br> Default: The container ID.|
 |`SUMO_DISABLE_SCRIPTS`       |If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based script sources. When this parameter is passed, this option is removed from the Sumo web application, and script source cannot be configured.<br><br> Default: false.|
 |`SUMO_GENERATE_USER_PROPERTIES`|Set this variable to “false” if you are providing the collector configuration settings using a `user.properties` file via a Docker volume mount.|
+|`SUMO_GENERATE_COLLECTOR_PROPERTIES`|Set this variable to “false” if you are providing the collector configuration settings using a `collector.properties` file via a Docker volume mount.|
 |`SUMO_JAVA_MEMORY_INIT`      |Sets the initial java heap size (in MB). <br><br>Default: 64|
 |`SUMO_JAVA_MEMORY_MAX`       |Sets the maximum java heap size (in MB). <br><br>Default: 128.|
 |`SUMO_PROXY_HOST`            |Sets proxy host when a proxy server is used.|
@@ -143,6 +144,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_SOURCES_JSON`          |Specifies the path to the `sumo-sources.json` file. <br><br>Default: `/etc/sumo-sources.json`. |
 |`SUMO_SYNC_SOURCES`          |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
 |`SUMO_FIPS_JCE`              |If "true", the FIPS 140-2 compliant Java Cryptography Extension (JCE) would be used to encrypt the data. <br><br>Default: false|
+|`SUMO_UDP_READ_BUFFER_SIZE`  |Sets the datagram size of the UDP messages (in bytes) <br><br>Default: 2048<br><br>Max: 65535|
 
 ### Configure collector in user.properties file
 You can supply source configuration values using a `user.properties` file via a Docker volume mount. For information about supported properties, see [user.properties](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) in Sumo help. For information about Docker volumes, see [Use Volumes](https://docs.docker.com/engine/admin/volumes/volumes/) in Docker help.
@@ -154,6 +156,18 @@ To use a custom `user.properties` file, you must pass the environment variable `
 For example:
 ```
 docker run other options -e SUMO_GENERATE_USER_PROPERTIES=false -v $some_path/user.properties:/opt/SumoCollector/config/user.properties sumologic/collector:$tag
+```
+
+### Configure collector in collector.properties file
+You can supply source configuration values using a `collector.properties` file via a Docker volume mount. For information about supported properties, see [collector.properties](https://help.sumologic.com/03Send-Data/Installed-Collectors/05Reference-Information-for-Collector-Installation/collector.properties) in Sumo help. For information about Docker volumes, see [Use Volumes](https://docs.docker.com/engine/admin/volumes/volumes/) in Docker help.
+
+**Note** If you configure a source using `collector.properties`, you cannot update the source configuration using the Sumo web app or the collector management API.
+
+To use a custom `collector.properties` file, you must pass the environment variable `SUMO_GENERATE_COLLECTOR_PROPERTIES=false`, and provide the Docker volume mount to replace the file located at `/opt/SumoCollector/config/collector.properties`.
+
+For example:
+```
+docker run other options -e SUMO_GENERATE_COLLECTOR_PROPERTIES=false -v $some_path/collector.properties:/opt/SumoCollector/config/collector.properties sumologic/collector:$tag
 ```
 
 ### To monitor more than 40 containers
