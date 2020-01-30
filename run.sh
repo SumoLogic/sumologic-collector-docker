@@ -49,6 +49,11 @@ generate_user_properties_file() {
       exit 1
     fi
 
+    #Writes our sources JSON to file if it exists as a variable and we're not using the .tmpl
+    if [ ! -z "${SUMO_JSON_CONFIG}" ] && [ ! -f "${SUMO_SOURCES_JSON}.tmpl" ]; then
+        echo ${SUMO_JSON_CONFIG} > "${SUMO_SOURCES_JSON}.tmpl"
+    fi
+
     # Support using env as replacement within sources.
     # Gather all template files
     declare -a TEMPLATE_FILES
