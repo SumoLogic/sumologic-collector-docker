@@ -15,6 +15,7 @@
     + [Sample query for containers created or started](#sample-query-for-containers-created-or-started)
 - [Use the Syslog collection image](#use-the-syslog-collection-image)
 - [Use the file collection image](#use-the-file-collection-image)
+- [Use the latest-no-sources image with a custom configuration](#use-the-latest-no-sources-image-with-a-custom-configuration)
 - [Create a custom Docker image](#create-a-custom-docker-image)
   * [Using source templates](#using-source-templates)
 
@@ -145,6 +146,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_SYNC_SOURCES`          |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
 |`SUMO_FIPS_JCE`              |If "true", the FIPS 140-2 compliant Java Cryptography Extension (JCE) would be used to encrypt the data. <br><br>Default: false|
 |`SUMO_UDP_READ_BUFFER_SIZE`  |Sets the datagram size of the UDP messages (in bytes) <br><br>Default: 2048<br><br>Max: 65535|
+|`SUMO_JSON_CONFIG` |Sets custom sources configuration. Must be valid sources json data. See [Use the latest-no-sources image with a custom configuration](#use-the-latest-no-sources-image-with-a-custom-configuration)|
 
 ### Configure collector in user.properties file
 You can supply source configuration values using a `user.properties` file via a Docker volume mount. For information about supported properties, see [user.properties](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) in Sumo help. For information about Docker volumes, see [Use Volumes](https://docs.docker.com/engine/admin/volumes/volumes/) in Docker help.
@@ -313,6 +315,14 @@ Configuration options:
 
 * Sources configuration. You can see the sumo-sources.json in the image at https://github.com/SumoLogic/sumologic-collector-docker/blob/master/file/sumo-containers.json. If you want to tailor the source configuration, create a new `sumo-sources.json`. When you run the image, specify the location of your `sumo-sources.json` file using the `SUMO_SOURCES_JSON` environment variable. 
 
+# Use the latest-no-sources image with a custom configuration
+If you have custom sources configurations or source template configurations and don't want to build a new image per configuration, you can use the latest-no-source image along with environment variables to inject your configuration to your containers. The SUMO_JSON_CONFIG environment variable will take valid JSON configuration normally stored in your sources.json file and inject it into the container on start up. This is best used in tandem with volumes shared on other containers to expose logs that might not normally be visibile. For example:
+
+```
+docker run other options -e SUMO_JSON_CONFIG="{ \"api.version\": \"v1\", \"sources\": [ { \"sourceType\": \"LocalFile\", \"name\": \"YourName\", \"pathExpression\": \"/path/to/logs/*\", \"category\": \"/your/category\" } ] }" -v shared_volume:/path/to/logs sumologic/collector:latest-no-source
+```
+
+**Note** If you use any image that already has a sources file configured, that file will take precedence over this enviroment variable.
 
 # Create a custom Docker image
 A base image to build your own image with a custom configuration is tagged latest-no-source. You must add `/etc/sumo-sources.json` to run it. This is the configuration file that specifies the sources, metadata, and settings that the collector should monitor.
