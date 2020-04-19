@@ -114,6 +114,7 @@ generate_user_properties_file() {
         ["SUMO_DISABLE_SCRIPTS"]="disableScriptSource"
         ["SUMO_JAVA_MEMORY_INIT"]="wrapper.java.initmemory"
         ["SUMO_JAVA_MEMORY_MAX"]="wrapper.java.maxmemory"
+        ["SUMO_COLLECTOR_FIELDS"]="fields"
     )
 
     USER_PROPERTIES=""
