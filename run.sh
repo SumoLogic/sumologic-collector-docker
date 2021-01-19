@@ -112,6 +112,7 @@ generate_user_properties_file() {
         ["SUMO_PROXY_NTLM_DOMAIN"]="proxyNtlmDomain"
         ["SUMO_CLOBBER"]="clobber"
         ["SUMO_DISABLE_SCRIPTS"]="disableScriptSource"
+        ["SUMO_ENABLE_SCRIPTS"]="enableScriptSource"
         ["SUMO_JAVA_MEMORY_INIT"]="wrapper.java.initmemory"
         ["SUMO_JAVA_MEMORY_MAX"]="wrapper.java.maxmemory"
         ["SUMO_COLLECTOR_FIELDS"]="fields"
