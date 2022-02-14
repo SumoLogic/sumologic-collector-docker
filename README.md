@@ -77,7 +77,7 @@ For example:
 
 * If you want to collect logs and events from only selected containers, set `allContainers` in the `Docker-logs` object to `false`, and specify selected containers using `specifiedContainers`.  
 
-* If you want to collect stats from only selected containers, set `allContainers` in the `Docker-stats` object to `false`, and specify selected containers using `specifiedContainers.` For more information, see [More about defining container filters]().
+* If you want to collect stats from only selected containers, set `allContainers` in the `Docker-stats` object to `false`, and specify selected containers using `specifiedContainers.` For more information, see [More about defining container filters](#more-about-defining-container-filters).
 
 * If you want to prevent the Docker logs source from collecting events (start, stop, and so on) set `collectEvents` in the `Docker-logs` object to `false`.
 
@@ -87,7 +87,7 @@ When you run the image, specify the location of your `sumo-sources.json` file us
 
 ### More about defining container filters 
 
-In the **Container Filter** field, you can enter a comma-separated list of one or more of the following types of filters:
+In the `specifiedContainer` field of the `sumo-sources.json` file, you can enter a comma-separated list of one or more of the following types of filters:
 
 * A specific container name, for example, “my-container”
 * A wildcard filter, for example, “my-container-\*”
