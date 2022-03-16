@@ -8,6 +8,10 @@ if [[ $SUMO_ACCESS_KEY_FILE ]]; then
   export SUMO_ACCESS_KEY=$(cat $SUMO_ACCESS_KEY_FILE)
 fi
 
+if [[ $SUMO_INSTALLATION_TOKEN_FILE ]]; then
+  export SUMO_INSTALLATION_TOKEN=$(cat $SUMO_INSTALLATION_TOKEN_FILE)
+fi
+
 SUMO_GENERATE_USER_PROPERTIES=${SUMO_GENERATE_USER_PROPERTIES:=true}
 SUMO_GENERATE_COLLECTOR_PROPERTIES=${SUMO_GENERATE_COLLECTOR_PROPERTIES:=true}
 SUMO_ACCESS_ID=${SUMO_ACCESS_ID:=$1}
@@ -42,11 +46,17 @@ generate_collector_properties_file() {
 }
 
 generate_user_properties_file() {
-    if [ -z "$SUMO_ACCESS_ID" ] || [ -z "$SUMO_ACCESS_KEY" ]; then
-      echo "FATAL: Please provide credentials, either via the SUMO_ACCESS_ID and SUMO_ACCESS_KEY environment variables,"
-      echo "       as the first two command line arguments,"
-      echo "       or in files references by SUMO_ACCESS_ID_FILE and SUMO_ACCESS_KEY_FILE!"
-      exit 1
+    if [ -z "$SUMO_ACCESS_ID" ] && [ -z "$SUMO_ACCESS_KEY" ]; then
+      if [ -z "$SUMO_INSTALLATION_TOKEN" ]; then
+        echo "FATAL: Please provide credentials via:"
+        echo "       * the SUMO_ACCESS_ID and SUMO_ACCESS_KEY environment variables,"
+        echo "       * as the first two command line arguments, or"
+        echo "       * in files references by SUMO_ACCESS_ID_FILE and SUMO_ACCESS_KEY_FILE"
+        echo "       You can also provide an installation token via:"
+        echo "       * the SUMO_INSTALLATION_TOKEN environment variable, or"
+        echo "       * in a file referenced by the SUMO_INSTALLATION_TOKEN_FILE environment variable"
+        exit 1
+      fi
     fi
 
     # Support using env as replacement within sources.
@@ -99,6 +109,7 @@ generate_user_properties_file() {
     SUPPORTED_OPTIONS=(
         ["SUMO_ACCESS_ID"]="accessid"
         ["SUMO_ACCESS_KEY"]="accesskey"
+        ["SUMO_INSTALLATION_TOKEN"]="token"
         ["SUMO_RECEIVER_URL"]="url"
         ["SUMO_COLLECTOR_NAME"]="name"
         ["SUMO_COLLECTOR_HOSTNAME"]="hostName"
