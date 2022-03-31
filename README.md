@@ -124,7 +124,7 @@ The following environment variables are supported. You can pass environment vari
 |------------------------------------|---------------|
 |`SUMO_ACCESS_ID`                    |Passes the Access ID.|
 |`SUMO_ACCESS_KEY`                   |Passes the Access Key.|
-|`SUMO_INSTALLATION_TOKEN`           |Passes the Installation Token.|
+|`SUMO_INSTALLATION_TOKEN`           |Passes the Installation Token. This is not the encoded Token+URL. It is the decoded token only. If your Sumo Logic instance is not in US1, you must also set `SUMO_RECEIVER_URL`.|
 |`SUMO_ACCESS_ID_FILE`               |Passes a bound file path containing Access ID.|
 |`SUMO_ACCESS_KEY_FILE`              |Passes a bound file path containing Access Key.|
 |`SUMO_INSTALLATION_TOKEN_FILE`      |Passes a bound file path containing the Installation Token.|
@@ -144,6 +144,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_PROXY_PASSWORD`               |Sets proxy password when a proxy server is used with authentication.|
 |`SUMO_PROXY_PORT`                   |Sets proxy port when a proxy server is used.|
 |`SUMO_PROXY_USER`                   |Sets proxy user when a proxy server is used with authentication.|
+|`SUMO_RECEIVER_URL`                 |Passes the collector endpoint URL. <br><br>Default: `https://collectors.sumologic.com`|
 |`SUMO_SOURCES_JSON`                 |Specifies the path to the `sumo-sources.json` file. <br><br>Default: `/etc/sumo-sources.json`. |
 |`SUMO_SYNC_SOURCES`                 |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
 |`SUMO_FIPS_JCE`                     |If "true", the FIPS 140-2 compliant Java Cryptography Extension (JCE) would be used to encrypt the data. <br><br>Default: false|
