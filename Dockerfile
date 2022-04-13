@@ -2,7 +2,7 @@
 # Version 0.1
 
 FROM ubuntu:20.04
-LABEL org.opencontainers.image.authors="Sumo Logic <docker@sumologic.com>"
+LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --quiet && \
