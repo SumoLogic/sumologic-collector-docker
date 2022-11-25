@@ -4,7 +4,7 @@
 FROM alpine:3.14
 LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 ENV DEBIAN_FRONTEND noninteractive
-RUN apk update && apk add wget
+RUN apk update && apk add wget && \
  wget -q -O /tmp/collector.deb https://collectors.sumologic.com/rest/download/deb/64 && \
  dpkg -i /tmp/collector.deb && \
  rm /tmp/collector.deb && \
