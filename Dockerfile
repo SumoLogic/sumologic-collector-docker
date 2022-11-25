@@ -9,7 +9,6 @@ RUN apk update && apk add wget && \
  apk add dpkg && \
  dpkg -i /tmp/collector.deb && \
  rm /tmp/collector.deb && \
- apt-get clean --quiet && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY run.sh /run.sh
