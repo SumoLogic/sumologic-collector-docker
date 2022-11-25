@@ -2,8 +2,7 @@
 # Version 0.1
 
 FROM alpine:3.14
-MAINTAINER Sumo Logic <docker@sumologic.com>
-
+LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --quiet && \
  apt-get install -y --no-install-recommends apt-utils && \
