@@ -1,8 +1,8 @@
 # Sumo Logic Collector Docker Image
 # Version 0.1
 
-FROM ubuntu:18.04
-MAINTAINER Sumo Logic <docker@sumologic.com>
+FROM ubuntu:20.04
+LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --quiet && \

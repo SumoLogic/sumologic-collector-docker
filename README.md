@@ -77,7 +77,7 @@ For example:
 
 * If you want to collect logs and events from only selected containers, set `allContainers` in the `Docker-logs` object to `false`, and specify selected containers using `specifiedContainers`.  
 
-* If you want to collect stats from only selected containers, set `allContainers` in the `Docker-stats` object to `false`, and specify selected containers using `specifiedContainers.` For more information, see [More about defining container filters]().
+* If you want to collect stats from only selected containers, set `allContainers` in the `Docker-stats` object to `false`, and specify selected containers using `specifiedContainers.` For more information, see [More about defining container filters](#more-about-defining-container-filters).
 
 * If you want to prevent the Docker logs source from collecting events (start, stop, and so on) set `collectEvents` in the `Docker-logs` object to `false`.
 
@@ -87,7 +87,7 @@ When you run the image, specify the location of your `sumo-sources.json` file us
 
 ### More about defining container filters 
 
-In the **Container Filter** field, you can enter a comma-separated list of one or more of the following types of filters:
+In the `specifiedContainer` field of the `sumo-sources.json` file, you can enter a comma-separated list of one or more of the following types of filters:
 
 * A specific container name, for example, “my-container”
 * A wildcard filter, for example, “my-container-\*”
@@ -120,33 +120,36 @@ The collector can be configured either with environment variables, or a volume-m
 The following environment variables are supported. You can pass environment variables to the `docker run` command with the `-e` flag.
 
 
-|Environment Variable      |Description    |
-|--------------------------|---------------|
-|`SUMO_ACCESS_ID`            |Passes the Access ID.|
-|`SUMO_ACCESS_KEY`           |Passes the Access Key.|
-|`SUMO_ACCESS_ID_FILE`       |Passes a bound file path containing Access ID.|
-|`SUMO_ACCESS_KEY_FILE`      |Passes a bound file path containing Access Key.|
-|`SUMO_CLOBBER`              | When true, if there is an existing collector with the same name, that collector will be deleted.<br><br>Default: false|
-|`SUMO_COLLECTOR_EPHEMERAL`  |When true, the collector will be deleted after it goes offline for 12 hours. <br><br>Default: true.|
-|`SUMO_COLLECTOR_FIELDS`     |Optional comma separated list of key=value fields to be added to the collector e.g. `_budget=Dev_20,cluster=k8s.dev`. Does nothing if `SUMO_GENERATE_USER_PROPERTIES` is set to “false”.|
-|`SUMO_COLLECTOR_NAME`       |Configures the name of the collector. The default is set dynamically to the value in `/etc/hostname`.|
-|`SUMO_COLLECTOR_NAME_PREFIX`|Configures a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the Docker hostname.<br><br>Default: "collector_container-"<br><br>If you do not want a prefix, set the variable as follows: <br><br>`SUMO_COLLECTOR_NAME_PREFIX = ""`|
-|`SUMO_COLLECTOR_HOSTNAME`   |Sets the host name of the machine on which the Collector container is running.<br><br> Default: The container ID.|
-|`SUMO_DISABLE_SCRIPTS`       |If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based script sources. When this parameter is passed, this option is removed from the Sumo web application, and script source cannot be configured.<br><br> Deprecated on Collector version 19.245-4. Use `SUMO_ENABLE_SCRIPTS` instead.|
-|`SUMO_ENABLE_SCRIPTS`       |Script Sources are disabled by default, you can enable the creation of script-based script sources.<br><br> Default: false.<br><br> Available on Collector version 19.245-4+.|
-|`SUMO_GENERATE_USER_PROPERTIES`|Set this variable to “false” if you are providing the collector configuration settings using a `user.properties` file via a Docker volume mount.|
+|Environment Variable                |Description    |
+|------------------------------------|---------------|
+|`SUMO_ACCESS_ID`                    |Passes the Access ID.|
+|`SUMO_ACCESS_KEY`                   |Passes the Access Key.|
+|`SUMO_INSTALLATION_TOKEN`           |Passes the Installation Token. This is not the encoded Token+URL. It is the decoded token only. If your Sumo Logic instance is not in US1, you must also set `SUMO_RECEIVER_URL`.|
+|`SUMO_ACCESS_ID_FILE`               |Passes a bound file path containing Access ID.|
+|`SUMO_ACCESS_KEY_FILE`              |Passes a bound file path containing Access Key.|
+|`SUMO_INSTALLATION_TOKEN_FILE`      |Passes a bound file path containing the Installation Token.|
+|`SUMO_CLOBBER`                      |When true, if there is an existing collector with the same name, that collector will be deleted.<br><br>Default: false|
+|`SUMO_COLLECTOR_EPHEMERAL`          |When true, the collector will be deleted after it goes offline for 12 hours. <br><br>Default: true.|
+|`SUMO_COLLECTOR_FIELDS`             |Optional comma separated list of key=value fields to be added to the collector e.g. `_budget=Dev_20,cluster=k8s.dev`. Does nothing if `SUMO_GENERATE_USER_PROPERTIES` is set to “false”.|
+|`SUMO_COLLECTOR_NAME`               |Configures the name of the collector. The default is set dynamically to the value in `/etc/hostname`.|
+|`SUMO_COLLECTOR_NAME_PREFIX`        |Configures a prefix to the collector name. Useful when overriding `SUMO_COLLECTOR_NAME` with the Docker hostname.<br><br>Default: "collector_container-"<br><br>If you do not want a prefix, set the variable as follows: <br><br>`SUMO_COLLECTOR_NAME_PREFIX = ""`|
+|`SUMO_COLLECTOR_HOSTNAME`           |Sets the host name of the machine on which the Collector container is running.<br><br> Default: The container ID.|
+|`SUMO_DISABLE_SCRIPTS`              |If your organization's internal policies restrict the use of scripts, you can disable the creation of script-based script sources. When this parameter is passed, this option is removed from the Sumo web application, and script source cannot be configured.<br><br> Deprecated on Collector version 19.245-4. Use `SUMO_ENABLE_SCRIPTS` instead.|
+|`SUMO_ENABLE_SCRIPTS`               |Script Sources are disabled by default, you can enable the creation of script-based script sources.<br><br> Default: false.<br><br> Available on Collector version 19.245-4+.|
+|`SUMO_GENERATE_USER_PROPERTIES`     |Set this variable to “false” if you are providing the collector configuration settings using a `user.properties` file via a Docker volume mount.|
 |`SUMO_GENERATE_COLLECTOR_PROPERTIES`|Set this variable to “false” if you are providing the collector configuration settings using a `collector.properties` file via a Docker volume mount.|
-|`SUMO_JAVA_MEMORY_INIT`      |Sets the initial java heap size (in MB). <br><br>Default: 64|
-|`SUMO_JAVA_MEMORY_MAX`       |Sets the maximum java heap size (in MB). <br><br>Default: 128.|
-|`SUMO_PROXY_HOST`            |Sets proxy host when a proxy server is used.|
-|`SUMO_PROXY_NTLM_DOMAIN`     |Sets proxy NTLM domain when a proxy server is used with NTLM authentication.|
-|`SUMO_PROXY_PASSWORD`        |Sets proxy password when a proxy server is used with authentication.|
-|`SUMO_PROXY_PORT`            |Sets proxy port when a proxy server is used.|
-|`SUMO_PROXY_USER`            |Sets proxy user when a proxy server is used with authentication.|
-|`SUMO_SOURCES_JSON`          |Specifies the path to the `sumo-sources.json` file. <br><br>Default: `/etc/sumo-sources.json`. |
-|`SUMO_SYNC_SOURCES`          |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
-|`SUMO_FIPS_JCE`              |If "true", the FIPS 140-2 compliant Java Cryptography Extension (JCE) would be used to encrypt the data. <br><br>Default: false|
-|`SUMO_UDP_READ_BUFFER_SIZE`  |Sets the datagram size of the UDP messages (in bytes) <br><br>Default: 2048<br><br>Max: 65535|
+|`SUMO_JAVA_MEMORY_INIT`             |Sets the initial java heap size (in MB). <br><br>Default: 64|
+|`SUMO_JAVA_MEMORY_MAX`              |Sets the maximum java heap size (in MB). <br><br>Default: 128.|
+|`SUMO_PROXY_HOST`                   |Sets proxy host when a proxy server is used.|
+|`SUMO_PROXY_NTLM_DOMAIN`            |Sets proxy NTLM domain when a proxy server is used with NTLM authentication.|
+|`SUMO_PROXY_PASSWORD`               |Sets proxy password when a proxy server is used with authentication.|
+|`SUMO_PROXY_PORT`                   |Sets proxy port when a proxy server is used.|
+|`SUMO_PROXY_USER`                   |Sets proxy user when a proxy server is used with authentication.|
+|`SUMO_RECEIVER_URL`                 |Passes the collector endpoint URL. <br><br>Default: `https://collectors.sumologic.com`|
+|`SUMO_SOURCES_JSON`                 |Specifies the path to the `sumo-sources.json` file. <br><br>Default: `/etc/sumo-sources.json`. |
+|`SUMO_SYNC_SOURCES`                 |If “true”, the `SUMO_SOURCES_JSON` file(s) will be continuously monitored and synchronized with the Collector's configuration. This will also disable editing of the collector in the Sumo UI. <br><br>Default: false|
+|`SUMO_FIPS_JCE`                     |If "true", the FIPS 140-2 compliant Java Cryptography Extension (JCE) would be used to encrypt the data. <br><br>Default: false|
+|`SUMO_UDP_READ_BUFFER_SIZE`         |Sets the datagram size of the UDP messages (in bytes) <br><br>Default: 2048<br><br>Max: 65535|
 
 ### Configure collector in user.properties file
 You can supply source configuration values using a `user.properties` file via a Docker volume mount. For information about supported properties, see [user.properties](http://help.sumologic.com/Send_Data/Installed_Collectors/05Reference_Information_for_Collector_Installation/06user.properties) in Sumo help. For information about Docker volumes, see [Use Volumes](https://docs.docker.com/engine/admin/volumes/volumes/) in Docker help.
