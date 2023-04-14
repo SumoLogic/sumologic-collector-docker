@@ -1,4 +1,4 @@
-FROM sumologic/collector-beta:latest-no-source-arm64
+FROM sumologic/collector:latest-no-source-arm64
 MAINTAINER Sumo Logic <docker@sumologic.com>
 ADD sumo-sources.json /etc/sumo-sources.json
 EXPOSE 514/udp
