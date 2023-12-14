@@ -128,6 +128,7 @@ The following environment variables are supported. You can pass environment vari
 |`SUMO_ACCESS_ID_FILE`               |Passes a bound file path containing Access ID.|
 |`SUMO_ACCESS_KEY_FILE`              |Passes a bound file path containing Access Key.|
 |`SUMO_INSTALLATION_TOKEN_FILE`      |Passes a bound file path containing the Installation Token.|
+|`SUMO_CATEGORY`                     |Specify collector Category.|
 |`SUMO_CLOBBER`                      |When true, if there is an existing collector with the same name, that collector will be deleted.<br><br>Default: false|
 |`SUMO_COLLECTOR_EPHEMERAL`          |When true, the collector will be deleted after it goes offline for 12 hours. <br><br>Default: true.|
 |`SUMO_COLLECTOR_FIELDS`             |Optional comma separated list of key=value fields to be added to the collector e.g. `_budget=Dev_20,cluster=k8s.dev`. Does nothing if `SUMO_GENERATE_USER_PROPERTIES` is set to “false”.|
