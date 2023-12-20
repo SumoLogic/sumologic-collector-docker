@@ -127,6 +127,7 @@ generate_user_properties_file() {
         ["SUMO_JAVA_MEMORY_INIT"]="wrapper.java.initmemory"
         ["SUMO_JAVA_MEMORY_MAX"]="wrapper.java.maxmemory"
         ["SUMO_COLLECTOR_FIELDS"]="fields"
+        ["SUMO_COLLECTOR_CATEGORY"]="category"
     )
 
     USER_PROPERTIES=""
