@@ -6,7 +6,7 @@ LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 
 RUN dnf upgrade -y && \
     dnf install -y wget && \
-    wget -q -O /tmp/collector.rpm https://collectors.au.sumologic.com/rest/download/rpm/aarch/64 && \
+    wget -q -O /tmp/collector.rpm https://collectors.sumologic.com/rest/download/rpm/aarch/64 && \
     dnf install -y /tmp/collector.rpm && \
     rm /tmp/collector.rpm && \
     dnf clean all && \
