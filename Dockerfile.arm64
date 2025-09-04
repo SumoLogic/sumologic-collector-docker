@@ -6,6 +6,7 @@ LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 
 RUN dnf upgrade -y && \
     dnf install -y \
+    initscripts \
     gettext \
     procps-ng \
     wget && \
