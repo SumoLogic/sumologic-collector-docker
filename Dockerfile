@@ -7,6 +7,7 @@ LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 RUN dnf upgrade -y && \
     dnf install -y \
     gettext \
+    procps-ng \
     wget && \
     wget -q -O /tmp/collector.rpm https://collectors.sumologic.com/rest/download/rpm/64 && \
     dnf install -y /tmp/collector.rpm && \
