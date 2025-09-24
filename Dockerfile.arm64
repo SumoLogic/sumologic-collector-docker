@@ -1,20 +1,19 @@
 # Sumo Logic Collector Docker Image
 # Version 0.1
 
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+FROM ubuntu:20.04
 LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 
-RUN dnf upgrade -y && \
-    dnf install -y \
-    initscripts \
-    gettext \
-    procps-ng \
-    wget && \
-    wget -q -O /tmp/collector.rpm https://collectors.sumologic.com/rest/download/rpm/aarch/64 && \
-    dnf install -y /tmp/collector.rpm && \
-    rm /tmp/collector.rpm && \
-    dnf clean all && \
-    rm -rf /var/cache/dnf /tmp/* /var/tmp/*
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update --quiet && \
+ apt-get install -y --no-install-recommends apt-utils && \
+ apt-get upgrade --quiet --allow-downgrades --allow-remove-essential --allow-change-held-packages -y && \
+ apt-get install --quiet --allow-downgrades --allow-remove-essential --allow-change-held-packages -y wget && \
+ wget -q -O /tmp/collector.deb https://collectors.sumologic.com/rest/download/deb/aarch/64 && \
+ dpkg -i /tmp/collector.deb && \
+ rm /tmp/collector.deb && \
+ apt-get clean --quiet && \
+ rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY run.sh /run.sh
 ENTRYPOINT ["/bin/bash", "/run.sh"]
