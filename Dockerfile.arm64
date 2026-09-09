@@ -4,14 +4,15 @@
 FROM ubuntu:24.04
 LABEL maintainer="Sumo Logic <docker@sumologic.com>"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update --quiet && \
  apt-get install -y --no-install-recommends apt-utils && \
- apt-get upgrade --quiet --allow-downgrades --allow-remove-essential --allow-change-held-packages -y && \
- apt-get install --quiet --allow-downgrades --allow-remove-essential --allow-change-held-packages -y wget && \
+ apt-get full-upgrade --quiet -y && \
+ apt-get install --quiet -y --no-install-recommends ca-certificates lsb-release wget && \
  wget -q -O /tmp/collector.deb https://collectors.sumologic.com/rest/download/deb/aarch/64 && \
  dpkg -i /tmp/collector.deb && \
  rm /tmp/collector.deb && \
+ apt-get autoremove --quiet -y && \
  apt-get clean --quiet && \
  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
