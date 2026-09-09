@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update --quiet && \
  apt-get install -y --no-install-recommends apt-utils && \
  apt-get full-upgrade --quiet -y && \
- apt-get install --quiet -y --no-install-recommends wget && \
+ apt-get install --quiet -y --no-install-recommends ca-certificates wget && \
  wget -q -O /tmp/collector.deb https://collectors.sumologic.com/rest/download/deb/64 && \
  dpkg -i /tmp/collector.deb && \
  rm /tmp/collector.deb && \
